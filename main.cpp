@@ -17,18 +17,28 @@ int main(){
   bool table_was_created = false;
   
   list< Type > tp;
-  list< string > f;
+  list< string > fl;
   
-  string p1("Фамилия");        f.add(p1); tp.add( STRING );
-  string p2("Имя");            f.add(p2); tp.add( STRING );
-  string p3("Отчество");       f.add(p3); tp.add( STRING );
-  string p4("Год рождения");   f.add(p4); tp.add( INT );
-  string p5("Курс");           f.add(p5); tp.add( STRING );
-  string p6("Оценки");         f.add(p6); tp.add( STRING );
+  string p1("Фамилия");        fl.add(p1); tp.add( STRING );
+  string p2("Имя");            fl.add(p2); tp.add( STRING );
+  string p3("Отчество");       fl.add(p3); tp.add( STRING );
+  string p4("Год рождения");   fl.add(p4); tp.add( INT );
+  string p5("Курс");           fl.add(p5); tp.add( STRING );
+  string p6("Оценки");         fl.add(p6); tp.add( STRING );
 
-  t.set_fields( f );
+  t.set_fields( fl );
   t.set_types( tp );
   table_was_created = true;
+
+  list<value> _obj;
+  string _o1("Иванов");         value o1( _o1 ); _obj.add(o1);
+  string _o2("Иван");           value o2( _o2 ); _obj.add(o2);
+  string _o3("Иванович");       value o3( _o3 ); _obj.add(o3);
+  int    _o4 = 2000;            value o4( _o4 ); _obj.add(o4);
+  string _o5("ИУК4-12Б");       value o5( _o5 ); _obj.add(o5);
+  string _o6("1, 2, 3, 4, 5");  value o6( _o6 ); _obj.add(o6);
+
+  //t.add( _obj );
 
 
   list< Type > _t;
@@ -99,46 +109,102 @@ int main(){
         // ВЫВОД
         if( table_was_created ){
           int col = t.fields.length();
-          /* 
+           
           list<int>width;
           for( int i = 0; i < col; i++ ){
             width.add( t.fields[i].length() ); 
           }
-          std::cout << "+";
+
+          for( int i = 0; i < t.objects.length(); i++ ){
+            for( int j = 0; j < col; j++ ){
+              int len = 0;
+              switch( t.objects[i][j].get_type() ){
+                case INT:{
+                  int num = t.objects[i][j].get_int();
+                    while( num ){
+                      len++;
+                      num /= 10;
+                    }
+                  }break;
+                case STRING:
+                  len = t.objects[i][j].get_string().length();
+                  break;
+                case ARRAY:
+                  len = 0;
+                  break;
+              
+
+              }
+              if( len > width[j] )
+                width[j] = len;
+            }
+          }
+
+          /* табличка должна выглядить как-то так
+           ╔════════╤═══╗
+           ║LONGBRUH│ A ║
+           ╟────────┼───╢
+           ║  BRUH1 │ABC║
+           ╟────────┼───╢
+           ║  BRUH2 │ C ║
+           ╚════════╧═══╝ 
+          */
+
+          std::cout << "╔";
           for( int i = 0; i < col; i++ ){
             for( int j = 0; j < width[i]; j++ ){
-              std::cout << "-";
+              std::cout << "═";
             } 
-            std::cout << "+";
+            std::cout <<  ( ( i + 1 == col ) ? "╗" : "╤" ) ;
           }
-          */
           std::cout << std::endl;
-          std::cout << "|";
+          
+          std::cout << "║";
           for( int i = 0; i < col; i++ ){
-            std::cout << t.fields[i].c_str() << "|";
+            print_center( t.fields[i], width[i] );
+            std::cout << ( ( i + 1 == col ) ? "║" : "│" );
           }
           std::cout << std::endl;
+
           value val;
           for( int i = 0; i < t.objects.length(); i++ ){
-            std::cout << "|";
+            std::cout << "╟";
+            for( int i = 0; i < col; i++ ){
+              for( int j = 0; j < width[i]; j++ ){
+                std::cout << "─";
+              } 
+              std::cout <<  ( ( i + 1 == col ) ? "╢" : "┼" ) ;
+            }
+            std::cout << std::endl;
+
+            std::cout << "║";
             for( int j = 0; j < t.fields.length(); j++ ){
               val = t.objects[i][j];
               switch( val.get_type() ){
                 case INT:
-                  std::cout << val.get_int();
+                  print_center( val.get_int(), width[j] );
                   break;
                 case STRING:
-                  std::cout << val.get_string().c_str();
+                  print_center( val.get_string(), width[j] );
                   break;
                 case ARRAY:
                   break;
               
               }
-              std::cout << "|";
+              std::cout << ( ( j + 1 == col ) ? "║" : "│" );
             }
             std::cout << std::endl;
+
           }
 
+          std::cout << "╚";
+          for( int i = 0; i < col; i++ ){
+            for( int j = 0; j < width[i]; j++ ){
+              std::cout << "═";
+            } 
+            std::cout <<  ( ( i + 1 == col ) ? "╝" : "╧" ) ;
+          }
+          std::cout << std::endl;
 
         
         }else{
