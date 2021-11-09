@@ -39,7 +39,7 @@ string::string( const char * str  ){
 
 string::string( string & str ){
 
-  std::size_t chunk_len = std::ceil( str.length()/ CHUNK_SIZE );
+  std::size_t chunk_len = std::ceil( len( str.c_str() ) / CHUNK_SIZE );
   capacity = chunk_len * CHUNK_SIZE;
   
   string_ptr = ( char * ) std::malloc( sizeof( char ) * chunk_len * CHUNK_SIZE );
@@ -47,7 +47,7 @@ string::string( string & str ){
   if (string_ptr == nullptr)
     throw std::runtime_error("failed to allocate memory ");
   std::memset( string_ptr, ZERO_TERMINATOR, capacity );
-  memcpy( string_ptr, str.c_str(), str.length()); 
+  memcpy( string_ptr, str.c_str(), len( str.c_str() ) ); 
 
 }
 
@@ -123,7 +123,7 @@ string& string::operator=( string& str ){
 }
 
 string& string::operator+( const char * str ){
-  std::size_t new_capacity = CHUNK_SIZE * ( std::ceil( (string::length() + len(str) - 1 ) / CHUNK_SIZE  ) ); // 2 len - 1, cuz double \0 at end of strings
+  std::size_t new_capacity = CHUNK_SIZE * ( std::ceil( ( len(string_ptr) + len(str) - 1 ) / CHUNK_SIZE  ) ); // 2 len - 1, cuz double \0 at end of strings
   
   if ( new_capacity > capacity ){
     char * old_str = string_ptr;
