@@ -18,21 +18,21 @@ class list {
     list();
 
 
-    int length();
+    int length() const;
     
     void add( T value );
     void insert( int pos, T value );
 
 
     int find( T value );
-    T& operator[]( int pos );
+    T& operator[]( int pos ) const;
 
     void remove( int pos );
 
     bool operator==( list<T>& );
    
     void clear(); 
-    list<T> operator=( list<T>& );
+    list<T> operator=( const list<T>& );
 
   private:
   

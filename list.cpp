@@ -9,7 +9,7 @@ list<T>::list(){
 
 
 template <typename T>
-int list<T>::length(){
+int list<T>::length() const{
   return size;
 }
 
@@ -54,7 +54,7 @@ int list<T>::find( T value ){
 }
 
 template <typename T>
-T& list<T>::operator[]( int pos ){
+T& list<T>::operator[]( int pos ) const{
 
   pos = size - pos - 1;
   Frame<T> *f = head;
@@ -98,6 +98,9 @@ bool list<T>::operator==( list<T>& other ){
   return eq;
 }
 
+
+
+
 template <typename T>
 void list<T>::clear(){
   // Здесь нужно очищать память
@@ -106,7 +109,7 @@ void list<T>::clear(){
 }
 
 template <typename T>
-list<T> list<T>::operator=( list<T>& other ){
+list<T> list<T>::operator=( const list<T>& other ){
   if( this != &other ){
     list<T>::clear();
     for( int i = 0; i < other.length(); i++ ){
@@ -115,3 +118,4 @@ list<T> list<T>::operator=( list<T>& other ){
   }
   return *this;
 }
+

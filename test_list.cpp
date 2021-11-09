@@ -3,8 +3,15 @@
 
 using namespace std;
 
-int main(){
+list< int > some_func(){
+  list< int > x;
+  x.add( 1 );
+  x.add( 2 );
+  x.add( 3 );
+  return x;
+}
 
+int main(){
   list<int> a;
 
   list<int> q1;
@@ -44,5 +51,12 @@ int main(){
   }
 
   cout << " q1 == q2 : " << ( q1 == q2 ) << endl;
+
+  list<int> z;
+  z = some_func();
+  std::cout << z.length() << std::endl;
+  for( int i = 0; i < z.length(); i++ ){
+    std::cout << z[i] << std::endl;
+  }
   return 0;
 }
