@@ -48,7 +48,7 @@ int main(){
           bool valid = false; 
           do{
             std::cout << std::endl;
-            std::cout << "  Введите имя поля или Enter >";
+            std::cout << "  Введите имя поля или Enter > ";
             _s = str_input().c_str();
             if( _s == "" ){
               if( end == -1 ){

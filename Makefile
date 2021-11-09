@@ -7,4 +7,4 @@ build:
 
 
 clean:
-	rm -rm DB
+	rm -rf DB
