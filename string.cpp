@@ -3,6 +3,7 @@
 #include <cstring>
 #include <stdexcept>
 #include <cmath>
+#include <cwchar>
 #include "string.hpp"
 
 #include <iostream>
@@ -59,14 +60,15 @@ string::~string(){
 
 
 std::size_t string::length(){
-  int i = 0;
-  char c = string_ptr[0];
-  int len = 0;
-  while( c != '\0' ){
-    c = string_ptr [i];
-    i++; len++;
-  } 
-  return len;
+  int count = 0;
+  char *p = string_ptr;
+  while (*p != 0)
+  {
+      if ((*p & 0x80) == 0 || (*p & 0xc0) == 0xc0)
+          ++count;
+      ++p;
+  }
+  return count;
 }
 
 

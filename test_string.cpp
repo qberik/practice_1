@@ -3,11 +3,9 @@
 
 int main(){
 
-  string s("Привет123");
+  string s("Строка из тридцати двух символов");
 
-  for( int i = 0; i < s.length(); i++ ){
-    std::cout << s[i] << std::endl;
-  }
-
+  std::cout << s.c_str() << " len is " << s.length() << std::endl;
+  
   return 0;
 }
