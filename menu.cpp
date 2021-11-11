@@ -34,9 +34,9 @@ void item1_stage1(){
 
 
 
-void print_center( int num, int width ){
+void print_center( int64_t num, int width ){
   int len = 0;
-  int _num = num;
+  int64_t _num = num;
   while( _num ){
     len++;
     _num /= 10;

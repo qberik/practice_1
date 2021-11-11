@@ -6,8 +6,8 @@
 
 value::value( ){ }
 
-value::value( const int& int_ptr ): type(INT) {
-  data.int_ptr = & ( const_cast<int&>(int_ptr) );
+value::value( const int64_t& int_ptr ): type(INT) {
+  data.int_ptr = & ( const_cast<int64_t&>(int_ptr) );
 }
 
 value::value( string& string_ptr ): type(STRING) {
@@ -19,9 +19,9 @@ value::value( list<int>& array_ptr ): type(ARRAY){
 }
 
 
-void value::set_value( int& int_ptr ){
+void value::set_value( int64_t& int_ptr ){
   type = INT;
-  data.int_ptr = & (const_cast<int&>(int_ptr) );
+  data.int_ptr = & (const_cast<int64_t&>(int_ptr) );
 }
 
 void value::set_value( string& string_ptr ){
@@ -40,7 +40,7 @@ Type value::get_type(){
 }
 
 
-int& value::get_int(){
+int64_t& value::get_int(){
   if(type != INT)
     throw std::runtime_error("value is not an int");
   return *data.int_ptr;

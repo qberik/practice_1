@@ -9,7 +9,7 @@ char * raw_input();
 
 string str_input( );
 
-int int_input();
+int64_t int_input();
 
 
 

@@ -8,16 +8,16 @@ class value{
 
   public:
     value();
-    value( const int& );
+    value( const int64_t& );
     value( string &str );
     value( list<int>& );
 
-    void set_value( int& );
+    void set_value( int64_t& );
     void set_value( string& );
     void set_value( list<int>& );
     Type get_type();
 
-    int& get_int();
+    int64_t& get_int();
     string& get_string();
     list<int>& get_array();
 
@@ -28,7 +28,7 @@ class value{
     Type type;
 
     union{
-      int * int_ptr;
+      int64_t * int_ptr;
       string * string_ptr;
       list<int> * array_ptr;
     } data;

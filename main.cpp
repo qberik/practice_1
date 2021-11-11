@@ -120,7 +120,7 @@ int main(){
               int len = 0;
               switch( t.objects[i][j].get_type() ){
                 case INT:{
-                  int num = t.objects[i][j].get_int();
+                  int64_t num = t.objects[i][j].get_int();
                     while( num ){
                       len++;
                       num /= 10;
@@ -234,10 +234,12 @@ int main(){
 
         value *v;
         switch( t.types[i] ){
-          case INT:
+          case INT:{
+            int64_t *int_tmp = new int64_t;
             std::cout << "  Введите число > ";
-            v = new value( int_input() );
-            break;
+            *int_tmp = int_input();
+            v = new value( *int_tmp );
+            }break;
           case STRING:{
             string *str = new string();
             std::cout << "  Введите строку > ";

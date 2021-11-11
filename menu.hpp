@@ -6,7 +6,7 @@
 void print_menu( );
 void item1_stage1();
 
-void print_center( int, int width );
+void print_center( int64_t, int width );
 void print_center( string, int width );
 void print_center( list<int>, int width );
 

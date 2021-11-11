@@ -47,8 +47,8 @@ string str_input(){
   return s;
 }
 
-int int_input(){
-  int num;
+int64_t int_input(){
+  int64_t num;
   std::cin >> num;
   std::cin.ignore();
   return num;
