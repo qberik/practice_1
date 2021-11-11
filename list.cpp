@@ -41,6 +41,37 @@ void list<T>::insert( int pos, T value ){
 }
 
 template <typename T>
+void list<T>::swap( int from, int to ){
+  T tmp = list<T>::operator[](from); 
+  list<T>::operator[](from) = list<T>::operator[](to); 
+  list<T>::operator[](to) = tmp; 
+}
+
+template <typename T>
+void list<T>::sort( bool(*compare)( T, T ) ){
+
+  //T min;
+  Frame<T> *a, *b, *tmp;
+  for( int i = 0; i < list<T>::length() - 1; i++ ){
+    int min = i;
+    for( int j = i + 1; j < list<T>::length(); j++ ){
+      if( (*compare)( list<T>::operator[](j), list<T>::operator[](min) ) ){
+        min = j; 
+      }
+    //std::cout << "Still ok " << min << ' ' << i << std::endl;
+    }
+
+    if( min != i ){
+      list<T>::swap( min, i );
+    } 
+  }
+}
+
+
+
+
+
+template <typename T>
 int list<T>::find( T value ){
   int index = -1;
   Frame<T> *f = head;

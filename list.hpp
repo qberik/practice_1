@@ -23,6 +23,8 @@ class list {
     void add( T value );
     void insert( int pos, T value );
 
+    void swap( int from, int to );
+    void sort( bool(*compare)( T, T ) );
 
     int find( T value );
     T& operator[]( int pos ) const;
