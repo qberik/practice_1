@@ -5,6 +5,7 @@
 #include <cmath>
 #include <cwchar>
 #include "string.hpp"
+#include "list.hpp"
 
 #include <iostream>
 
@@ -71,6 +72,65 @@ std::size_t string::length(){
   return count;
 }
 
+void string::strip( char sep){
+  int from = 0; 
+  bool flag = true;
+  int l = len( string_ptr ) - 1;
+  for( int i = 0; i < l && flag; i++ ){
+    if( *(string_ptr+i) == sep ){
+      from++;  
+    }else{
+      flag = false; 
+    }
+  } 
+  int to = l - 1;
+  flag = true;
+  for( int i = 0; i < l && flag; i++ ){
+    if( *(string_ptr + (l - 1) - i ) == sep ){
+      to--;
+    }else{
+      flag = false; 
+    }
+  }
+  int clear = from + ( l - to );
+  for( int i = 0; i < l - from; i++ ){
+    string::operator[](i) = string::operator[](from + i);
+  }
+  for( int i = 0; i < clear; i++ ){
+    string::operator[](l - i) = ZERO_TERMINATOR;
+  }
+  
+}
+
+list<string> string::split( char sep ){
+  int l = len( string_ptr ) - 1;
+  int it = 0;
+  list<string> str_list;
+  bool flag = false;
+  string* tmp_str = nullptr;
+  for( int i = 0; i < l; i++ ){
+    if( *(string_ptr + i) != sep ){
+      if( flag ){
+        (*tmp_str)[ it++ ] = *( string_ptr + i);
+      }else{
+        if( tmp_str != nullptr ){
+          str_list.add( *tmp_str );  
+        }
+        flag = true;
+        tmp_str = new string;
+        it = 0;
+        (*tmp_str)[ it++ ] = *( string_ptr + i);
+      }
+    }else{
+      flag = false;
+    }
+  }
+  if( tmp_str != nullptr ){
+    str_list.add( *tmp_str );  
+  }
+  return str_list;
+
+}
 
 const char * string::c_str(){
   return string_ptr;

@@ -1,6 +1,7 @@
 #ifndef STRING_HPP
 #define STRING_HPP
 #include <cstddef>
+#include "list.hpp"
 
 
 
@@ -12,6 +13,10 @@ class string{
     ~string();
     
     size_t length();
+
+    void strip( char separator = ' ' );
+
+    list<string> split( char separator = ' ' );
 
     const char * c_str();
 
