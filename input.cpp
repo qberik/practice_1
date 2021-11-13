@@ -55,4 +55,34 @@ int64_t int_input(){
 }
 
 
+bool isdigit( char c ){
+  return ( c >= '0' && c <= '9' );
+}
+
+int atoi( string s ){
+  int a = 0;
+  int factor = 1;
+  for( int i = 0; i < s.length(); i++ ){
+    if( isdigit( s[ s.length() - 1 - i ] ) ){
+      a += ( s[ s.length() - 1 - i ] - '0' ) * factor;
+      factor *= 10;
+    }
+  }
+  return a;
+}
+
+
+list<int> arr_input(){
+
+  string s;
+  s = str_input().c_str();
+  list <string> list_str = s.split();
+  list <int> list_int;
+  for( int i = 0; i < list_str.length(); i++ ){
+    list_int.add( atoi( list_str[i] ) );
+  }
+  return list_int;
+}
+
+
 

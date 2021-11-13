@@ -11,6 +11,8 @@ string str_input( );
 
 int64_t int_input();
 
+list<int> arr_input();
+
 
 
 #endif

@@ -84,3 +84,42 @@ void print_center( string str, int width ){
   }
 
 }
+
+void print_center( list<int> l, int width ){
+  int len = 0;
+  for( int i = 0; i < l.length(); i++ ){
+    int num = l[i];
+    int _num = num;
+    len++;
+    while( _num ){
+      _num/=10;
+      len++;
+    }
+    if( num == 0 )
+      len += 1;
+    if( num <  0 )
+      len += 1;
+  }
+  len--; // without last space
+
+  if( len > width ){
+    for( int i = 0; i < width; i++ )
+      cout << "#";
+  }else{
+    int space = width - len;
+    int left = floor( space / 2.0 );
+    int right = ceil( space / 2.0 );
+
+    for( int i = 0; i < left; i++ ){
+      cout << ' ';
+    }
+    for( int i = 0; i < l.length() - 1; i++ ){
+      cout << l[i] << ' '; 
+    }
+    cout << l[l.length()-1];
+    for( int i = 0; i < right; i++ ){
+      cout << ' ';
+    }
+  }
+
+}

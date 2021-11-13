@@ -24,7 +24,7 @@ int main(){
   string p3("Отчество");       fl.add(p3); tp.add( STRING );
   string p4("Год рождения");   fl.add(p4); tp.add( INT );
   string p5("Курс");           fl.add(p5); tp.add( STRING );
-  string p6("Оценки");         fl.add(p6); tp.add( STRING );
+  string p6("Оценки");         fl.add(p6); tp.add( ARRAY );
 
   t.set_fields( fl );
   t.set_types( tp );
@@ -36,9 +36,10 @@ int main(){
   string _o3("Иванович");       value o3( _o3 ); _obj.add(o3);
   int    _o4 = 2000;            value o4( _o4 ); _obj.add(o4);
   string _o5("ИУК4-12Б");       value o5( _o5 ); _obj.add(o5);
-  string _o6("1, 2, 3, 4, 5");  value o6( _o6 ); _obj.add(o6);
+  list<int> _o6; _o6.add(-2); _o6.add(-1); _o6.add(0); _o6.add(1); _o6.add(2);
+  value o6( _o6 ); _obj.add(o6);
 
-  //t.add( _obj );
+  t.add( _obj );
 
 
   list< Type > _t;
@@ -125,12 +126,32 @@ int main(){
                       len++;
                       num /= 10;
                     }
+                    if( t.objects[i][j].get_int() == 0 ){
+                    len = 1;
+                    }
+                    if( t.objects[i][j].get_int() < 0 ){
+                      len += 1;
+                    }
                   }break;
                 case STRING:
                   len = t.objects[i][j].get_string().length();
                   break;
                 case ARRAY:
-                  len = 0;
+                  list<int> arr_tmp = t.objects[i][j].get_array();
+                  for( int i = 0; i < arr_tmp.length(); i++ ){
+                    int num = arr_tmp[i];
+                    int _num = num;
+                    len++;
+                    while( _num ){
+                      len++;
+                      _num/=10;
+                    }
+                    if ( num == 0 )
+                      len++;
+                    if ( num <  0 )
+                      len++;
+                  }
+                    len--;
                   break;
               
 
@@ -188,6 +209,7 @@ int main(){
                   print_center( val.get_string(), width[j] );
                   break;
                 case ARRAY:
+                  print_center( val.get_array(), width[j] );
                   break;
               
               }
@@ -247,9 +269,12 @@ int main(){
             *str = _s;
             v = new value( *str );
             }break;
-          case ARRAY:
-            //v = new value( int_input() );
-            break;
+          case ARRAY:{
+            std::cout << "  Введите числа через пробел > ";
+            list<int> *arr_tmp = new list<int>;
+            *arr_tmp = arr_input();
+            v = new value( *arr_tmp );
+            }break;
         }
 
         obj->add( *v );
