@@ -47,28 +47,34 @@ string str_input(){
   return s;
 }
 
-int64_t int_input(){
-  int64_t num;
-  std::cin >> num;
-  std::cin.ignore();
-  return num;
-}
-
 
 bool isdigit( char c ){
   return ( c >= '0' && c <= '9' );
 }
 
-int atoi( string s ){
-  int a = 0;
+int64_t atoi( string s ){
+  int64_t a = 0;
   int factor = 1;
   for( int i = 0; i < s.length(); i++ ){
     if( isdigit( s[ s.length() - 1 - i ] ) ){
       a += ( s[ s.length() - 1 - i ] - '0' ) * factor;
       factor *= 10;
+    }else{
+      if( s[ s.length() - 1 - i ] == '-' ){
+        a *= -1;
+      }
     }
   }
   return a;
+}
+
+
+int64_t int_input(){
+  string s;
+  s = str_input().c_str();
+  s.strip();
+  int64_t num = atoi( s );
+  return num;
 }
 
 

@@ -100,7 +100,8 @@ void print_center( list<int> l, int width ){
     if( num <  0 )
       len += 1;
   }
-  len--; // without last space
+  if( l.length() != 0 )
+    len--; // without last space
 
   if( len > width ){
     for( int i = 0; i < width; i++ )
@@ -116,7 +117,8 @@ void print_center( list<int> l, int width ){
     for( int i = 0; i < l.length() - 1; i++ ){
       cout << l[i] << ' '; 
     }
-    cout << l[l.length()-1];
+    if( l.length() > 0 )
+      cout << l[l.length()-1];
     for( int i = 0; i < right; i++ ){
       cout << ' ';
     }
