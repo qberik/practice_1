@@ -8,6 +8,10 @@
 
 table::table(){ }
 
+void table::set_name( string nm ){
+  name = nm;
+}
+
 void table::set_fields( list< string > fld ){
   fields = fld;
 }

@@ -14,6 +14,7 @@ int main(){
 
   table t;
 
+  table.set_name("Ученики");
   bool table_was_created = false;
   
   list< Type > tp;

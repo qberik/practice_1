@@ -12,6 +12,7 @@ class table{
   public:
     table();
 
+    void set_name( string );
     void set_fields( list< string > );
     void set_types( list< Type > );
     void add( list<value> object );
@@ -31,7 +32,7 @@ class table{
 
 
     list< list< value > > objects;
-
+    string name;
     list< string > fields;
     list< Type > types;
 
