@@ -13,8 +13,8 @@ int main(){
   bool exit = false;
 
   table t;
-
-  table.set_name("Ученики");
+  string table_name("Ученики");
+  t.set_name( table_name );
   bool table_was_created = false;
   
   list< Type > tp;
