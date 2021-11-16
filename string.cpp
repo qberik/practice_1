@@ -9,7 +9,7 @@
 
 #include <iostream>
 
-#define CHUNK_SIZE 16.0
+#define CHUNK_SIZE 3.0
 #define ZERO_TERMINATOR '\0'
 
 std::size_t len( const char * str ){
@@ -140,8 +140,7 @@ const char * string::c_str(){
 char& string::operator[]( int index ){
 
   if( index < 0 )
-    index = len( string_ptr ) - index;
-    // привет питону siiing str("abc")[-1] == 'c'
+    index = len( string_ptr ) - 1 + index;
 
   if( index + 1 >= capacity ){
     char * old_ptr = string_ptr;

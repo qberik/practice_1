@@ -18,5 +18,10 @@ int main(){
     std::cout << l[i].c_str() <<  std::endl;
   }
   
+  string st("ASD");
+
+  std::cout << st[-1] << std::endl;
+  std::cout << st[2] << std::endl;
+
   return 0;
 }
