@@ -20,19 +20,16 @@ int main(){
     std::cout << "WIN" << std::endl;
   #endif 
   
-  string s1;
-
-  string s2;
-
-  std::cout << "Введи что-то 2 раза" << std::endl;
-  s1 = raw_input();
-
-  s2 = str_input().c_str();
-
+  string s;
+  std::cout << "Введи что-то 1 раз" << std::endl;
+  s = raw_input();
   std::cout << "Сейчас попробую вывести" << std::endl;
-  std::cout << s1.c_str() << std::endl;
-
-  std::cout << s2.c_str() << std::endl;
+  std::cout << s.c_str() << std::endl;
+  std::cout << "А сейчас выведу цифровые коды" << std::endl;
+  for( int i = 0; s[i] != '\0'; i++ ){
+    std::cout << (int)s[i] << ' '; 
+  }
+  std::cout << std::endl;
 
   return 0;
 }
