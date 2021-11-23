@@ -126,16 +126,13 @@ char * new_raw_input(){
             a[i++] = *p++;
         #else
           a[i++] = c; 
-        #endif
       }
       else{ a[i] = k = 0; }
   }
   return a;
 }
 
-
-
-char * raw_input(){
+char * raw(){
   char * a = (char*)calloc( CHUNK_SIZE ,sizeof(char) );
   if( a == nullptr )
     throw std::runtime_error("failed to allocate memory ");
@@ -157,15 +154,26 @@ char * raw_input(){
       if (c != '\n' && i < max_len ) a[i++] = c;
       else a[i] = k = 0;
   }
-  #ifdef WINDOWS
-    char * b = (char*)calloc( max_len * 2 ,sizeof(char) );
-    cp1251_to_utf8( b, a );
-    return b;
-  #else
     return a;
-  #endif
 }
 
+#ifdef WINDOWS
+char * raw_input(){
+  char * tmp_str = raw_input();
+  char * _tmp  = tmp_str;
+  int size = 0;
+  while( _tmp++ )
+    size++;
+  char * str = (char *)malloc( sizeof(char) * size );
+  cp1251_to_utf8( str, tmp_str );
+  return str;
+}
+#else
+char * raw_input(){
+    return raw();
+}
+
+#endif
 
 
 string str_input(){
