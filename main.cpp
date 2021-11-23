@@ -1,3 +1,8 @@
+#ifdef __GNUC__
+  #define LINUX
+#else
+  #define WINDOWS
+#endif
 //#include <iostream>
 #include "menu.hpp"
 #include "input.hpp"
@@ -6,10 +11,14 @@
 #include "list.hpp"
 #include "value.hpp"
 #include "string.hpp"
-
+#ifdef WINDOWS
+  #include <windows.h>
+#endif
 
 int main(){
- 
+  #ifdef WINDOWS
+    SetConsoleOutputCP(CP_UTF8);
+  #endif 
   bool exit = false;
 
   table t;
