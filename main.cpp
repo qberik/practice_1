@@ -3,7 +3,7 @@
 #else
     #define LINUX
 #endif
-//#include <iostream>
+#include <iostream>
 #include "menu.hpp"
 #include "input.hpp"
 #include "type.hpp"
@@ -18,6 +18,7 @@
 int main(){
   #ifdef WINDOWS
     SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(1251);
   #endif 
   bool exit = false;
 
@@ -90,18 +91,18 @@ int main(){
           do{
             std::cout << std::endl;
             std::cout << "  Доступные типы:" << std::endl;
-            std::cout << "  Type::INT Type::STRING Type::INT_Type::ARRAY " << std::endl;
+            std::cout << "  INT STRING INT_ARRAY " << std::endl;
             std::cout << "  Введите тип > ";
             _s = str_input().c_str();
-            if( _s == "Type::INT" ){
+            if( _s == "INT" ){
               _t.add( Type::INT );
               valid = true;
             }
-            if( _s == "Type::STRING" ){
+            if( _s == "STRING" ){
               _t.add( Type::STRING );
               valid = true;
             }
-            if( _s == "Type::INT_Type::ARRAY" ){
+            if( _s == "INT_ARRAY" ){
               _t.add( Type::ARRAY );
               valid = true;
             }

@@ -1,27 +1,37 @@
 #include <iostream>
 #include "string.hpp"
 #include "list.hpp"
+#include "input.hpp"
+
+#if defined(_WIN64) || defined(_WIN32)
+    #define WINDOWS
+#else
+    #define LINUX
+#endif
+
+#ifdef WINDOWS
+  #include <windows.h>
+#endif
 
 int main(){
+  #ifdef WINDOWS
+    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(1251);
+  #endif 
   
-  string s("   Тестовая строка с пробелами в начале и в конце     ");
-  string s1 = s;
+  string s1;
 
-  std::cout << s.c_str() << "# len is " << s.length() << std::endl;
+  string s2;
 
-  s1.strip();
-  std::cout << "strip string " << s1.c_str() << " len is " << s1.length() << std::endl;
+  std::cout << "Введи что-то 2 раза" << std::endl;
+  s1 = raw_input();
 
-  list<string> l = s.split();
-  std::cout << "split string" << std::endl;
-  for( int i = 0; i < l.length(); i++ ){
-    std::cout << l[i].c_str() <<  std::endl;
-  }
-  
-  string st("ASD");
+  s2 = str_input().c_str();
 
-  std::cout << st[-1] << std::endl;
-  std::cout << st[2] << std::endl;
+  std::cout << "Сейчас попробую вывести" << std::endl;
+  std::cout << s1.c_str() << std::endl;
+
+  std::cout << s2.c_str() << std::endl;
 
   return 0;
 }

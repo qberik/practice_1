@@ -73,7 +73,9 @@ char * raw_input(){
 }
 
 string str_input(){
-  string s("");
+  string s;
+  s = raw_input();
+  /*
   bool newline = false;
   char c;
   int i = 0;
@@ -86,6 +88,7 @@ string str_input(){
       newline = true;
     } 
   }
+  */
   return s;
 }
 
