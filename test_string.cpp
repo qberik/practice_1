@@ -17,6 +17,7 @@ int main(){
   #ifdef WINDOWS
     SetConsoleOutputCP(CP_UTF8);
     SetConsoleCP(1251);
+    std::cout << "WIN" << std::endl;
   #endif 
   
   string s1;

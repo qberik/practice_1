@@ -5,7 +5,6 @@
 #define CHUNK_SIZE 16
 #define RETURN_CODE 10
 
-/*
 void cp1251_to_utf8(char *out, const char *in) {
     static const char table[128*3+1] = {                 
         "\320\202 \320\203 \342\200\232\321\223 \342\200\236\342\200\246\342\200\240\342\200\241"
@@ -40,10 +39,9 @@ void cp1251_to_utf8(char *out, const char *in) {
             *out++ = *in++;
     *out = 0;
 }
-*/
 
 
-char * raw_input(){
+char * new_raw_input(){
 
   #ifdef WINDOWS
   const char table[128*3+1] = {                 
@@ -137,7 +135,6 @@ char * raw_input(){
 
 
 
-/*
 char * raw_input(){
   char * a = (char*)calloc( CHUNK_SIZE ,sizeof(char) );
   if( a == nullptr )
@@ -161,14 +158,15 @@ char * raw_input(){
       else a[i] = k = 0;
   }
   #ifdef WINDOWS
-    char * b = (char*)calloc( max_len ,sizeof(char) );
+    char * b = (char*)calloc( max_len * 2 ,sizeof(char) );
     cp1251_to_utf8( b, a );
     return b;
   #else
     return a;
   #endif
 }
-*/
+
+
 
 string str_input(){
   string s;
