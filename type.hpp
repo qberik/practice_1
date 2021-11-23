@@ -1,11 +1,12 @@
 #ifndef TYPE_H
 #define TYPE_H
 
-enum Type{
-    INT,
-    STRING,
-    //DATE,
-    ARRAY
-}; 
-
+namespace Type{
+  enum Type{
+      INT,
+      STRING,
+      //DATE,
+      ARRAY
+  }; 
+}
 #endif

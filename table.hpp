@@ -14,7 +14,7 @@ class table{
 
     void set_name( string );
     void set_fields( list< string > );
-    void set_types( list< Type > );
+    void set_types( list< Type::Type > );
     void add( list<value> object );
     void edit( int id, list<value> new_obj );
     void remove( int id );
@@ -34,7 +34,7 @@ class table{
     list< list< value > > objects;
     string name;
     list< string > fields;
-    list< Type > types;
+    list< Type::Type > types;
 
 };
 #endif

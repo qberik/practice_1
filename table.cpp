@@ -16,7 +16,7 @@ void table::set_fields( list< string > fld ){
   fields = fld;
 }
 
-void table::set_types( list< Type > tp ){
+void table::set_types( list< Type::Type > tp ){
   types = tp;
 }
 

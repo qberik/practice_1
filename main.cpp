@@ -1,7 +1,7 @@
-#ifdef __GNUC__
-  #define LINUX
+#if defined(_WIN64) || defined(_WIN32)
+    #define WINDOWS
 #else
-  #define WINDOWS
+    #define LINUX
 #endif
 //#include <iostream>
 #include "menu.hpp"
@@ -26,15 +26,15 @@ int main(){
   t.set_name( table_name );
   bool table_was_created = false;
   
-  list< Type > tp;
+  list< Type::Type > tp;
   list< string > fl;
   
-  string p1("Фамилия");        fl.add(p1); tp.add( STRING );
-  string p2("Имя");            fl.add(p2); tp.add( STRING );
-  string p3("Отчество");       fl.add(p3); tp.add( STRING );
-  string p4("Год рождения");   fl.add(p4); tp.add( INT );
-  string p5("Курс");           fl.add(p5); tp.add( STRING );
-  string p6("Оценки");         fl.add(p6); tp.add( ARRAY );
+  string p1("Фамилия");        fl.add(p1); tp.add( Type::STRING );
+  string p2("Имя");            fl.add(p2); tp.add( Type::STRING );
+  string p3("Отчество");       fl.add(p3); tp.add( Type::STRING );
+  string p4("Год рождения");   fl.add(p4); tp.add( Type::INT );
+  string p5("Курс");           fl.add(p5); tp.add( Type::STRING );
+  string p6("Оценки");         fl.add(p6); tp.add( Type::ARRAY );
 
   t.set_fields( fl );
   t.set_types( tp );
@@ -52,7 +52,7 @@ int main(){
   t.add( _obj );
 
 
-  list< Type > _t;
+  list< Type::Type > _t;
   list< string > _f;
   string _s;
 
@@ -90,19 +90,19 @@ int main(){
           do{
             std::cout << std::endl;
             std::cout << "  Доступные типы:" << std::endl;
-            std::cout << "  INT STRING INT_ARRAY " << std::endl;
+            std::cout << "  Type::INT Type::STRING Type::INT_Type::ARRAY " << std::endl;
             std::cout << "  Введите тип > ";
             _s = str_input().c_str();
-            if( _s == "INT" ){
-              _t.add( INT );
+            if( _s == "Type::INT" ){
+              _t.add( Type::INT );
               valid = true;
             }
-            if( _s == "STRING" ){
-              _t.add( STRING );
+            if( _s == "Type::STRING" ){
+              _t.add( Type::STRING );
               valid = true;
             }
-            if( _s == "INT_ARRAY" ){
-              _t.add( ARRAY );
+            if( _s == "Type::INT_Type::ARRAY" ){
+              _t.add( Type::ARRAY );
               valid = true;
             }
           }while( !valid );
@@ -130,7 +130,7 @@ int main(){
             for( int j = 0; j < col; j++ ){
               int len = 0;
               switch( t.objects[i][j].get_type() ){
-                case INT:{
+                case Type::INT:{
                   int64_t num = t.objects[i][j].get_int();
                     while( num ){
                       len++;
@@ -143,10 +143,10 @@ int main(){
                       len += 1;
                     }
                   }break;
-                case STRING:
+                case Type::STRING:
                   len = t.objects[i][j].get_string().length();
                   break;
-                case ARRAY:
+                case Type::ARRAY:
                   list<int> arr_tmp = t.objects[i][j].get_array();
                   for( int i = 0; i < arr_tmp.length(); i++ ){
                     int num = arr_tmp[i];
@@ -212,13 +212,13 @@ int main(){
             for( int j = 0; j < t.fields.length(); j++ ){
               val = t.objects[i][j];
               switch( val.get_type() ){
-                case INT:
+                case Type::INT:
                   print_center( val.get_int(), width[j] );
                   break;
-                case STRING:
+                case Type::STRING:
                   print_center( val.get_string(), width[j] );
                   break;
-                case ARRAY:
+                case Type::ARRAY:
                   print_center( val.get_array(), width[j] );
                   break;
               
@@ -252,13 +252,13 @@ int main(){
           std::cout << std::endl;
           std::cout << "  Имя поля " << t.fields[i].c_str() << std::endl;
           switch( t.types[i] ){
-            case INT:
+            case Type::INT:
               _s = "Int";
               break;
-            case STRING:
+            case Type::STRING:
               _s = "String";
               break;
-            case ARRAY:
+            case Type::ARRAY:
               _s = "Array";
               break;
           }
@@ -266,20 +266,20 @@ int main(){
 
         value *v;
         switch( t.types[i] ){
-          case INT:{
+          case Type::INT:{
             int64_t *int_tmp = new int64_t;
             std::cout << "  Введите число > ";
             *int_tmp = int_input();
             v = new value( *int_tmp );
             }break;
-          case STRING:{
+          case Type::STRING:{
             string *str = new string();
             std::cout << "  Введите строку > ";
             _s = str_input().c_str();
             *str = _s;
             v = new value( *str );
             }break;
-          case ARRAY:{
+          case Type::ARRAY:{
             std::cout << "  Введите числа через пробел > ";
             list<int> *arr_tmp = new list<int>;
             *arr_tmp = arr_input();

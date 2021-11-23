@@ -15,7 +15,7 @@ class value{
     void set_value( int64_t& );
     void set_value( string& );
     void set_value( list<int>& );
-    Type get_type();
+    Type::Type get_type();
 
     int64_t& get_int();
     string& get_string();
@@ -25,7 +25,7 @@ class value{
     bool operator!=( value& ); 
 
   //private:
-    Type type;
+    Type::Type type;
 
     union{
       int64_t * int_ptr;
