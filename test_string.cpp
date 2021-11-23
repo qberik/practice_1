@@ -1,13 +1,13 @@
-#include <iostream>
-#include "string.hpp"
-#include "list.hpp"
-#include "input.hpp"
-
 #if defined(_WIN64) || defined(_WIN32)
     #define WINDOWS
 #else
     #define LINUX
 #endif
+
+#include <iostream>
+#include "string.hpp"
+#include "list.hpp"
+#include "input.hpp"
 
 #ifdef WINDOWS
   #include <windows.h>
