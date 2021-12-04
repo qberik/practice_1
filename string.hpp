@@ -2,6 +2,7 @@
 #define STRING_HPP
 #include <cstddef>
 #include "list.hpp"
+#include <ostream>
 
 
 
@@ -21,6 +22,8 @@ class string{
     const char * c_str();
 
     char& operator[]( const int  ); 
+
+    friend std::ostream& operator<< (std::ostream& out, string& str); 
 
     //string& operator[]( const std::size_t );
     string& operator=( const char * );

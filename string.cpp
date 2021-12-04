@@ -154,6 +154,12 @@ char& string::operator[]( int index ){
   }
   return *( string_ptr + index );
 }
+std::ostream& operator<< (std::ostream& out, string& str){
+  out << str.c_str();
+  return out;
+}
+
+
 
 
 string& string::operator=( const char * str ){
