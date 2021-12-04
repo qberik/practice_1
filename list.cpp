@@ -23,6 +23,15 @@ void list<T>::add( T value ){
   size += 1;
 }
 
+template <typename T>
+void list<T>::add( T value, int pos ){
+  Frame<T> *f = new Frame<T>();
+  f -> data = value;
+  f -> prev = head;
+  head = f;
+  size += 1;
+}
+
 
 template <typename T>
 void list<T>::insert( int pos, T value ){
@@ -80,7 +89,8 @@ int list<T>::find( T value ){
       index = i;
     f = f -> prev;
   }
-  index = size - index - 1;
+  if( index != -1 )
+    index = size - index - 1;
   return index;
 }
 

@@ -21,6 +21,7 @@ class list {
     int length() const;
     
     void add( T value );
+    void add( T value, int pos );
     void insert( int pos, T value );
 
     void swap( int from, int to );
