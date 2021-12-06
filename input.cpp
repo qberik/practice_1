@@ -5,8 +5,16 @@
 #define CHUNK_SIZE 16
 #define RETURN_CODE 10
 
-void cp1251_to_utf8(char *out, const char *in) {
-    static const char table[128*3+1] = {                 
+#if defined(_WIN64) || defined(_WIN32)
+    #define WINDOWS
+#else
+    #define LINUX
+#endif
+
+
+char* raw_input(){
+  #ifdef WINDOWS
+  char table[128*3+1] = {                 
         "\320\202 \320\203 \342\200\232\321\223 \342\200\236\342\200\246\342\200\240\342\200\241"
         "\342\202\254\342\200\260\320\211 \342\200\271\320\212 \320\214 \320\213 \320\217 "      
         "\321\222 \342\200\230\342\200\231\342\200\234\342\200\235\342\200\242\342\200\223\342\200\224"
@@ -24,25 +32,7 @@ void cp1251_to_utf8(char *out, const char *in) {
         "\321\200 \321\201 \321\202 \321\203 \321\204 \321\205 \321\206 \321\207 "
         "\321\210 \321\211 \321\212 \321\213 \321\214 \321\215 \321\216 \321\217 "
     };
-    while (*in != '\0' )
-        if (*in & 0x80) {
-            const char *p = &table[3 * (0x7f & *in++)];
-            if (*p == ' ')
-                continue;
-            *out++ = *p++;
-            *out++ = *p++;
-            if (*p == ' ')
-                continue;
-            *out++ = *p++;
-        }
-        else
-            *out++ = *in++;
-    *out = 0;
-}
-
-
-
-char * raw(){
+  #endif
   char * a = (char*)calloc( CHUNK_SIZE ,sizeof(char) );
   if( a == nullptr )
     throw std::runtime_error("failed to allocate memory ");
@@ -54,36 +44,38 @@ char * raw(){
   while (k > 0)
   {
       c = getchar();
-      if ( i >= max_len ){
+      if ( i + 3 >= max_len ){
         char * tmp = a;
         a = (char*)realloc( a ,max_len + CHUNK_SIZE );
         if( a == nullptr )
           throw std::runtime_error("failed to allocate memory ");
         max_len += CHUNK_SIZE;
       }
-      if (c != '\n' && i < max_len ) a[i++] = c;
+      if (c != '\n' && i < max_len ){ 
+        //a[i++] = c;
+        #ifdef WINDOWS
+        if( c & 0x80 ){
+          char *p = &table[3 * (0x7f & c)];
+          if (*p == ' ')
+              continue;
+          a[i++] = *p++;
+          a[i++] = *p++;
+          if (*p == ' ')
+              continue;
+          a[i++] = *p++;
+        }else{
+          a[i++] = c; 
+        }
+        #else
+        a[i++] = c;
+        #endif
+      }
       else a[i] = k = 0;
   }
-    return a;
+  return a;
 }
 
-#ifdef WINDOWS
-char * raw_input(){
-  char * tmp_str = raw_input();
-  char * _tmp  = tmp_str;
-  int size = 0;
-  while( _tmp++ )
-    size++;
-  char * str = (char *)malloc( sizeof(char) * size );
-  cp1251_to_utf8( str, tmp_str );
-  return str;
-}
-#else
-char * raw_input(){
-    return raw();
-}
 
-#endif
 
 
 string str_input(){
