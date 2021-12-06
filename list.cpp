@@ -1,4 +1,4 @@
-#include <iostream>
+#include <ostream>
 
 template <typename T>
 list<T>::list(){
@@ -76,6 +76,17 @@ void list<T>::sort( bool(*compare)( T, T ) ){
   }
 }
 
+template <typename T>
+std::ostream& operator<< (std::ostream& out, const list<T>& l){
+
+  out << '[';
+  for( int i = 0; i < l.length(); i++ ){
+    out << l[i] << ( (i != l.length() - 1 ) ? ", " : "" );
+  }
+  out << ']';
+
+  return out;
+}
 
 
 
@@ -86,6 +97,20 @@ int list<T>::find( T value ){
   Frame<T> *f = head;
   for( int i = 0; i < size; i++ ){
     if( f -> data == value )
+      index = i;
+    f = f -> prev;
+  }
+  if( index != -1 )
+    index = size - index - 1;
+  return index;
+}
+
+template <typename T>
+int list<T>::find( bool (*condition)( T ) ){
+  int index = -1;
+  Frame<T> *f = head;
+  for( int i = 0; i < size; i++ ){
+    if( (*condition)( f -> data ) )
       index = i;
     f = f -> prev;
   }

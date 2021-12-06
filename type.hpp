@@ -6,7 +6,8 @@ namespace Type{
       INT,
       STRING,
       //DATE,
-      ARRAY
+      ARRAY,
+      NONE
   }; 
 }
 #endif

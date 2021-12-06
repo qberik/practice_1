@@ -59,8 +59,21 @@ string::~string(){
 
 }
 
+int string::count( char c ) const{
+  int count = 0;
 
-std::size_t string::length(){
+  for( int i = 0; i < strlen( string_ptr ); i++ )
+    if( *(string_ptr + i ) == c )
+      count++;
+
+  return count;
+}
+
+std::size_t string::size() const{
+  return strlen( string_ptr );
+}
+
+std::size_t string::length() const{
   int count = 0;
   char *p = string_ptr;
   while (*p != 0)
@@ -132,12 +145,31 @@ list<string> string::split( char sep ){
 
 }
 
-const char * string::c_str(){
+const char * string::c_str() const{
   return string_ptr;
 }
 
 
-char& string::operator[]( int index ){
+std::size_t string::find( const char* str ) const{
+  std::size_t index = -1;
+  for( int i = 0; i < strlen( string_ptr ); i++ ){
+    bool eql = true;
+    for( int j = 0; j < strlen( str ); j++ )
+      if( *(string_ptr + i + j) != *(str + j ) )
+        eql = false;
+    if (eql)
+      index = i;
+  }
+  return index;
+}
+
+std::size_t string::find( const string str ) const{
+  return string::find( str.c_str() );
+}
+
+
+
+char& string::operator[]( int index ) {
 
   if( index < 0 )
     index = len( string_ptr ) - 1 + index;
@@ -187,6 +219,8 @@ string& string::operator=( string& str ){
   return string::operator=( str.c_str() );
 }
 
+
+
 string& string::operator+( const char * str ){
   std::size_t new_capacity = CHUNK_SIZE * ( std::ceil( ( len(string_ptr) + len(str) - 1 ) / CHUNK_SIZE  ) ); // 2 len - 1, cuz double \0 at end of strings
   
@@ -211,12 +245,25 @@ string& string::operator+( string&  str ){
   return string::operator+( str.c_str() );
 }
 
+
+string& string::operator+( const char c ){
+  char s[2] {};
+  s[0] = c;
+  return string::operator+( s );
+}
+
+
 string& string::operator+=( const char * str ){
   string::operator+( str );
   return *this;
 }
 
 string& string::operator+=( string& str ){
+  string::operator+( str );
+  return *this;
+}
+
+string& string::operator+=( const char str ){
   string::operator+( str );
   return *this;
 }
@@ -241,7 +288,7 @@ bool string::operator<( const char * str ){
   return flag;
 }
 
-bool string::operator<( string& str ){
+bool string::operator<( const string& str ){
   return string::operator<( str.c_str() );
 }
 
@@ -265,7 +312,7 @@ bool string::operator>( const char * str ){
   return flag;
 }
 
-bool string::operator>( string& str ){
+bool string::operator>( const string& str ){
   return string::operator>( str.c_str() );
 }
 
@@ -289,7 +336,7 @@ bool string::operator==( const char * str ){
   return flag;
 }
 
-bool string::operator==( string& str ){
+bool string::operator==( const string& str ){
   return string::operator==( str.c_str() );
 }
 
@@ -297,7 +344,7 @@ bool string::operator!=( const char * str ){
   return !( string::operator==( str ) );
 }
 
-bool string::operator!=( string& str ){
+bool string::operator!=( const string& str ){
   return string::operator!=( str.c_str() );
 }
 
@@ -305,7 +352,7 @@ bool string::operator<=( const char * str ){
   return ( string::operator<(str) || string::operator==(str) );
 }
 
-bool string::operator<=( string& str ){
+bool string::operator<=( const string& str ){
   return string::operator<=( str.c_str() );
 }
 
@@ -313,6 +360,6 @@ bool string::operator>=( const char * str ){
   return ( string::operator>(str) || string::operator==(str) );
 }
 
-bool string::operator>=( string& str ){
+bool string::operator>=( const string& str ){
   return string::operator>=( str.c_str() );
 }

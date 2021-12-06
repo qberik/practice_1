@@ -3,7 +3,9 @@
 #include "string.hpp"
 
 
+void cp1251_to_utf8(char *, const char *);
 
+int atoi( string );
 
 char * raw_input();
 

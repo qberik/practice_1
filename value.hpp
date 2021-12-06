@@ -15,12 +15,13 @@ class value{
     void set_value( int64_t& );
     void set_value( string& );
     void set_value( list<int>& );
-    Type::Type get_type();
 
-    int64_t& get_int();
-    string& get_string();
-    list<int>& get_array();
+    Type::Type get_type() const;
+    int64_t& get_int() const;
+    string& get_string() const;
+    list<int>& get_array() const;
 
+    friend std::ostream& operator<< (std::ostream& out, const value& );
     bool operator==( value& ); 
     bool operator!=( value& ); 
 

@@ -5,6 +5,7 @@
  * на предыдущий */
 // TODO
 // - написать деструктор, а то память течёт
+#include <ostream>
 
 template <typename T>
 struct Frame{
@@ -26,8 +27,12 @@ class list {
 
     void swap( int from, int to );
     void sort( bool(*compare)( T, T ) );
+    
+    template <typename _T>
+    friend std::ostream& operator<< (std::ostream& out, const list<_T>& );
 
     int find( T value );
+    int find( bool (*condition)( T ) );
     T& operator[]( int pos ) const;
 
     void remove( int pos );

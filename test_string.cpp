@@ -14,22 +14,33 @@
 #endif
 
 int main(){
+  /*
   #ifdef WINDOWS
     SetConsoleOutputCP(CP_UTF8);
     SetConsoleCP(1251);
     std::cout << "WIN" << std::endl;
   #endif 
-  
-  string s;
-  std::cout << "Введи что-то 1 раз" << std::endl;
-  s = raw_input();
-  std::cout << "Сейчас попробую вывести" << std::endl;
-  std::cout << s.c_str() << std::endl;
-  std::cout << "А сейчас выведу цифровые коды" << std::endl;
-  for( int i = 0; s[i] != '\0'; i++ ){
-    std::cout << (int)s[i] << ' '; 
+ 
+  char str[] = { -12, -5, -30 };
+
+  char str2[100];
+
+  cp1251_to_utf8( str2, str );
+
+  std::cout << str2 << std::endl;
+
+  for( int i = 0; str2[i] != '\0'; i++ ){
+    std::cout << (int)str2[i] << ' '; 
   }
   std::cout << std::endl;
 
+  */
+  list<string> s;
+  string str("SOME");
+  s.add(str);
+  s.add(str);
+  s[0][0] = 's';
+  s[1] += '_';
+  std::cout << "I print " << s[0].find("OM") << " AND " << s[1] << std::endl;
   return 0;
 }
