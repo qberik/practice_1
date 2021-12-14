@@ -5,7 +5,7 @@
 
 void cp1251_to_utf8(char *, const char *);
 
-int atoi( string );
+int string_to_int( string );
 
 char * raw_input();
 

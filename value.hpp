@@ -12,7 +12,7 @@ class value{
     value( string &str );
     value( list<int>& );
 
-    void set_value( int64_t& );
+    void set_value( const int64_t& );
     void set_value( string& );
     void set_value( list<int>& );
 

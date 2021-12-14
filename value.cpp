@@ -4,7 +4,7 @@
 #include "string.hpp"
 #include "type.hpp"
 
-value::value( ){ }
+value::value(  ){ type = Type::NONE; }
 
 value::value( const int64_t& int_ptr ): type(Type::INT) {
   data.int_ptr = & ( const_cast<int64_t&>(int_ptr) );
@@ -19,7 +19,7 @@ value::value( list<int>& array_ptr ): type(Type::ARRAY){
 }
 
 
-void value::set_value( int64_t& int_ptr ){
+void value::set_value( const int64_t& int_ptr ){
   type = Type::INT;
   data.int_ptr = & (const_cast<int64_t&>(int_ptr) );
 }

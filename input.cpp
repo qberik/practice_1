@@ -103,7 +103,7 @@ bool isdigit( char c ){
   return ( c >= '0' && c <= '9' );
 }
 
-int64_t atoi( string s ){
+int64_t string_to_int( string s ){
   int64_t a = 0;
   int factor = 1;
   for( int i = 0; i < s.length(); i++ ){
@@ -124,7 +124,7 @@ int64_t int_input(){
   string s;
   s = str_input().c_str();
   s.strip();
-  int64_t num = atoi( s );
+  int64_t num = string_to_int( s );
   return num;
 }
 
@@ -136,7 +136,7 @@ list<int> arr_input(){
   list <string> list_str = s.split();
   list <int> list_int;
   for( int i = 0; i < list_str.length(); i++ ){
-    list_int.add( atoi( list_str[i] ) );
+    list_int.add( string_to_int( list_str[i] ) );
   }
   return list_int;
 }
