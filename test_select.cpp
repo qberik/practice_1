@@ -80,7 +80,8 @@ int main(){
   //s = "SELECT  MIN(Баллы, Оценки ) , SUM(Оценки), Курс, AVG(Баллы, Оценки ) FROM Ученики GROUP BY Курс HAVING 2 > 1";
   //s = "SELECT Год рождения, Курс, MAX(Баллы, Оценки ) FROM Ученики WHERE 4 > 3";
   
-  s = "SELECT TOP 1 Имя, Год рождения, Курс FROM Ученики  ORDER BY Год рождения DESC"; //, Год рождения, ORDER BY Имя";
+  //s = "SELECT Имя, Год рождения, Курс FROM Ученики  ORDER BY Имя"; //, Год рождения, ORDER BY Имя";
+  s = "SELECT SUM( Оценки ), Курс FROM Ученики GROUP BY Курс ORDER BY Курс ";
   //s = "SELECT SUM(Оценки) , MIN(Баллы, Оценки ) , Год рождения FROM Ученики GROUP BY Год рождения";
   //s = "SELECT SUM(Оценки) , SUM(Баллы) FROM Ученики WHERE SUM(Оценки, Баллы) < -100";
 

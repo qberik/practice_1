@@ -709,6 +709,105 @@ list< list< value > > sql( list<table> db, string rq ){
         temp_rs.add( ___temp_rs );
       }
     }
+   
+
+
+
+    if( is_order_by ){
+      for( int i = 0; i < order.length(); i++ ){
+        for( int j = 0; j < temp_rs.length(); j++ ){
+          int min_id = j;
+          for( int u = j + 1; u < temp_rs.length(); u++ ){
+            list< int > indexes;
+            indexes.add( u );
+            indexes.add( min_id );
+            list< value > ab_val;
+            for( int o = 0; o < indexes.length(); o++ ){
+              if( is_func( order[i] ) ){
+                string _tmp_str("");       
+                for( int k = order[i].find("(") + 1; k < order[i].find(")"); k++ ){
+                  _tmp_str += order[i][k]; 
+                }
+                _tmp_str.strip();
+                list< string > _tmp_list = _tmp_str.split(',');
+                list< list <value> > _tmp_val;
+                for( int k = 0; k < _tmp_list.length(); k++ ){
+                  _tmp_list[k].strip();
+                  bool _is_num = true;
+                  for( int l = 0; l < _tmp_list[k].length(); l++ )
+                    if( !( ( _tmp_list[k][l] <= '9' && _tmp_list[k][l] >= '0' ) || _tmp_list[k][l] == '-' )  )
+                      _is_num = false;
+                  if( !( k == _tmp_list.length() - 1 && _is_num ) ){
+                    int id = flds.find( _tmp_list[k] );
+                    _tmp_val.add( temp_rs[ indexes[o] ][ id ] );   
+                  
+                  }
+
+                }
+                int64_t *num = new int64_t( compute_func( _tmp_val, order[i] ) );
+                value v( *num );
+                ab_val.add( v );
+                  
+              }else{
+                if( order[i] == group_expr ){
+                  int id = flds.find( order[i] );
+                  ab_val.add( temp_rs[ indexes[o] ][ id ][0] );
+                }else{
+                  string error( "can't get filed " );
+                  error += order[i];
+                  error += " as ordering item";
+                  std::runtime_error( error.c_str() ); 
+                }
+              
+              }
+            
+
+            if( ab_val[0].get_type() != ab_val[1].get_type() ){
+              string error("can't compare type"); 
+              error += '0' + ab_val[0].get_type();
+              error += " with ";
+              error += '0' + ab_val[1].get_type();
+              std::runtime_error( error.c_str() );
+            }
+
+            bool res = false;
+
+            switch( ab_val[0].get_type() ){
+              case Type::INT:{
+                if( is_desc )
+                res = ab_val[0].get_int() > ab_val[1].get_int();
+                else
+                res = ab_val[0].get_int() < ab_val[1].get_int();
+              break;} 
+              case Type::STRING:{
+                if( is_desc )
+                res = ab_val[0].get_string() > ab_val[1].get_string();
+                else
+                res = ab_val[0].get_string() < ab_val[1].get_string();
+              break;} 
+              case Type::ARRAY:{
+                std::runtime_error("can't compare arrays");
+              break;} 
+
+            }
+
+            if( res )
+              min_id = u;
+            
+            }
+          if( min_id != j ){
+          
+            temp_rs.swap( j, min_id );
+          
+          }
+
+            } 
+          
+          }
+        
+        }
+
+      }
     
     list<value> __rs;
     rs.clear(); value empy_value;
@@ -846,9 +945,15 @@ list< list< value > > sql( list<table> db, string rq ){
 
             switch( ab_val[0].get_type() ){
               case Type::INT:{
+                if( is_desc )
+                res = ab_val[0].get_int() > ab_val[1].get_int();
+                else
                 res = ab_val[0].get_int() < ab_val[1].get_int();
               break;} 
               case Type::STRING:{
+                if( is_desc )
+                res = ab_val[0].get_string() > ab_val[1].get_string();
+                else
                 res = ab_val[0].get_string() < ab_val[1].get_string();
               break;} 
               case Type::ARRAY:{
@@ -857,18 +962,8 @@ list< list< value > > sql( list<table> db, string rq ){
             
             }
 
-            //std::cout << ab_val[0] << " < " << ab_val[1] << " : " << res << std::endl;
-          
-            if( is_desc ){
-              res = !res; 
-            }
-
-
-            if( res ){
+            if( res )
               min_id = u;
-            }
-
-
           
           }
           if( min_id != j ){
@@ -937,6 +1032,7 @@ list< list< value > > sql( list<table> db, string rq ){
   }
   //std::cout << std::endl;
 
+  //std::cout << "OUTPUT" << std::endl;
   if( is_top ){
     if( rs.length() > top_num ){
       for( int i = 0; i <= rs.length() - top_num; i++ ){
