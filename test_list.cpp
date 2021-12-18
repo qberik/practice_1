@@ -22,11 +22,11 @@ bool comp( int a, int b ){
 int main(){
   list<int> a;
 
-  a.add(4);
-  a.add(4);
-  a.add(3);
-  a.add(2);
+  a.add(0);
   a.add(1);
+  a.add(2);
+  a.add(3);
+  a.add(4);
 
   a = a;
 
@@ -37,10 +37,10 @@ int main(){
   }
   
 
-  a.sort( &comp );
+  //a.sort( &comp );
+  a.remove( 0 );
 
-
-  cout << "# Show sorted list #" << endl;
+  cout << "# Show edited list #" << endl;
   for( int i = 0; i < a.length(); i++ ){
     cout << i << " index, element " << a[i] << endl; 
   }

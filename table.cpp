@@ -6,7 +6,19 @@
 #include "type.hpp"
 
 
-table::table(){ }
+table::table(){ 
+  name = "";
+}
+
+
+table& table::operator=( const table & tab ){
+  name = tab.name.c_str();
+  objects = tab.objects; 
+  fields = tab.fields;
+  types = tab.types;
+  return *this;
+}
+
 
 void table::set_name( string nm ){
   name = nm;

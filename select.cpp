@@ -397,7 +397,7 @@ list< list<T>> filter(  list<list<T>> objs, list<string> fields, list<Type::Type
 
 
 
-list< list< value > > sql( list<table> db, string rq ){
+table sql( list<table> db, string rq ){
 
   list< list< value > > rs;
 
@@ -1041,11 +1041,17 @@ list< list< value > > sql( list<table> db, string rq ){
     }
   }
   
+  list< string > _flds;
+  list< Type::Type > _typs;
+  for( int i = 0; i < rs.length(); i++ ){
+    _flds.add( cols[i] );
+    _typs.add( rs[0][i].get_type() );
+  }
+  table _t;
+  _t.objects = rs;
+  _t.fields = _flds;
+  _t.types = _typs;
 
-  return rs;
+  return _t;
 
 }
-
-
-
-

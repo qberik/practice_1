@@ -65,6 +65,7 @@ int main(){
 
   */
 
+
   t.add( _obj );
   t.add( __obj );
   t.add( ___obj );
@@ -73,7 +74,6 @@ int main(){
   list< table > db;
   db.add( t );
 
-  //string s("SELECT a, AVG( b) , SUM(c ), *, C, C, B FROM A, B , C , *, * WHERE SOME <= SUM(AVG(COL )) AND COL > AVG( SOME_ANOTER_COL) GROUP BY SOME_COOL < AVG( A ), A < B AND B >= C OR A == C HAVING C <= SUM( A) ORDER BY B, A , C" );
   string s ("");
 
   //s = "SELECT  MIN(Баллы, Оценки ) , SUM(Оценки), Год рождения , MAX(Баллы, Оценки ) FROM Ученики GROUP BY Год рождения HAVING SUM(Оценки, Баллы) < -100";
@@ -85,7 +85,13 @@ int main(){
   //s = "SELECT SUM(Оценки) , MIN(Баллы, Оценки ) , Год рождения FROM Ученики GROUP BY Год рождения";
   //s = "SELECT SUM(Оценки) , SUM(Баллы) FROM Ученики WHERE SUM(Оценки, Баллы) < -100";
 
-  std::cout << sql( db, s ) << std::endl;
+  table tb;
+  tb = sql( db, s );
+
+
+  std::cout << tb.fields << std::endl;
+  std::cout << tb.types << std::endl;
+  std::cout << tb.objects << std::endl;
 
   return 0;
 }

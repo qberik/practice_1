@@ -36,17 +36,24 @@ void list<T>::add( T value, int pos ){
 template <typename T>
 void list<T>::insert( int pos, T value ){
   Frame<T> *tmp = head;
-  int endpos = size - pos - 1;
-  for( int i = 0; i < endpos; i++ ){
-    tmp = tmp -> prev;    
-  } 
+  if( size == 1 && pos != 0 ){ 
+    list<T>::add( value, pos );
+    //list<T>::add( value, size - pos );
+  }else if(pos == size){
+    list<T>::add( value );
+  }else{
+    int endpos = size - pos - 1;
+      
+    for( int i = 0; i < endpos; i++ ){
+      tmp = tmp -> prev;    
+    } 
 
-  Frame<T> *f = new Frame<T>();
-  f -> data = value;
-  f -> prev = tmp -> prev;
-  tmp -> prev = f;
-
-  size += 1;
+    Frame<T> *f = new Frame<T>();
+    f -> data = value;
+    f -> prev = tmp -> prev;
+    tmp -> prev = f;
+    size += 1;
+  }
 }
 
 template <typename T>

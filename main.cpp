@@ -4,6 +4,8 @@
     #define LINUX
 #endif
 #include <iostream>
+#include <stdexcept>
+#include <fstream>
 #include "menu.hpp"
 #include "input.hpp"
 #include "type.hpp"
@@ -20,288 +22,387 @@ int main(){
     SetConsoleOutputCP(CP_UTF8);
     SetConsoleCP(1251);
   #endif 
+
+  list< table > db;
+  int selected = -1;
+
+  bool preset = true;
+  if( preset ){
+    string nam( "Test table" );
+
+    list< string > fld;
+    string f1("A"); fld.add(f1);
+    string f2("B"); fld.add(f2);
+    string f3("C"); fld.add(f3);
+    
+    list< Type::Type > typ;
+    typ.add( Type::INT );
+    typ.add( Type::STRING );
+    typ.add( Type::ARRAY );
+
+    table t;
+    t.set_name( nam );
+    t.set_fields( fld );
+    t.set_types( typ );
+
+    int64_t v_1 = 123; value v1( v_1 );
+    string *v_2 = new string("SOME"); value v2( *v_2 );
+    list< int > v_3;
+    v_3.add( 1 ); v_3.add( 2 ); v_3.add( 3 ); v_3.add( 4 );
+    value v3( v_3 );
+    list< value > o1;
+    o1.add( v1 );
+    o1.add( v2 );
+    o1.add( v3 );
+
+    int64_t v_4 = -9876543210; value v4( v_4 );
+    string *v_5 = new string("qwerty-12345"); value v5( *v_5 );
+    list< int > v_6;
+    v_6.add( -1 ); v_6.add( -2 ); v_6.add( -3 ); v_6.add( 400 );
+    value v6 ( v_6 );
+    list < value > o2;
+    o2.add( v4 );
+    o2.add( v5 );
+    o2.add( v6 );
+
+    t.add( o1 );
+    t.add( o2 );
+
+    db.add( t );
+    selected = 1;
+
+  
+  }
+
+
   bool exit = false;
+  bool menu = false;
 
-  table t;
-  string table_name("Ученики");
-  t.set_name( table_name );
-  bool table_was_created = false;
-  
-  list< Type::Type > tp;
-  list< string > fl;
-  
-  string p1("Фамилия");        fl.add(p1); tp.add( Type::STRING );
-  string p2("Имя");            fl.add(p2); tp.add( Type::STRING );
-  string p3("Отчество");       fl.add(p3); tp.add( Type::STRING );
-  string p4("Год рождения");   fl.add(p4); tp.add( Type::INT );
-  string p5("Курс");           fl.add(p5); tp.add( Type::STRING );
-  string p6("Оценки");         fl.add(p6); tp.add( Type::ARRAY );
-
-  t.set_fields( fl );
-  t.set_types( tp );
-  table_was_created = true;
-
-  list<value> _obj;
-  string _o1("Иванов");         value o1( _o1 ); _obj.add(o1);
-  string _o2("Иван");           value o2( _o2 ); _obj.add(o2);
-  string _o3("Иванович");       value o3( _o3 ); _obj.add(o3);
-  int    _o4 = 2000;            value o4( _o4 ); _obj.add(o4);
-  string _o5("ИУК4-12Б");       value o5( _o5 ); _obj.add(o5);
-  list<int> _o6; _o6.add(-2); _o6.add(-1); _o6.add(0); _o6.add(1); _o6.add(2);
-  value o6( _o6 ); _obj.add(o6);
-
-  t.add( _obj );
-
-
-  list< Type::Type > _t;
-  list< string > _f;
-  string _s;
-
+  clean_screen();
   do{
     print_menu();
-    switch( int_input() ){
+    int ch = int_input();
+    clean_screen();
+    switch( ch ){
       case 1:{
-        item1_stage1();
-        int end = -1;
-        _t.clear();
-        _f.clear();
+              do{
+              print_menu1();
+              int ch = int_input();
+              clean_screen();
+              switch( ch ){
+                case 1:{
+                        if( db.length() == 0 ){
+                          std::cout << "     Нет созданных таблиц\n" << std::endl;  
+                        }else{
+                          std::cout << "     Создано " << db.length() << " таблиц" << std::endl;
+                          for( int i = 0; i < db.length(); i++ )
+                            std::cout << "     Нормер:" << i+1 << " Имя:" << db[i].name << " Поля:" << db[i].fields << std::endl;
+                        
+                        }
+                break;}
+                case 2:{
+                        if( db.length() == 0 ){
+                          std::cout << "     Нет созданных таблиц\n" << std::endl;  
+                        }else{
+                          std::cout << "     Введите номер таблицы > ";
+                          int id = int_input() - 1;
+                          std::cout << "     После какого поля вставить новое? " << std::endl; 
+                          std::cout << "     По умолчанию в конец (" << db[id].fields.length()  << ")" << std::endl; 
+                          std::cout << "     Введите позицию поля > ";
+                          int pos = int_input();
+                          
+                          std::cout << "     Введите имя поля > ";
+                          string name; name = str_input().c_str();
+                          string str_type; Type::Type type;
+                          bool valid = false; value default_value;
+                          do{
+                            std::cout << "     Доступные типы:" << std::endl;
+                            std::cout << "     INT STRING INT_ARRAY " << std::endl;
+                            std::cout << "     Введите тип поля > ";
+                            str_type = str_input().c_str();
+                            if( str_type == "INT" ){
+                              type = Type::INT;
+                              int64_t val = 0;
+                              default_value.set_value( val );
+                              valid = true;
+                            }
+                            if( str_type == "STRING" ){
+                              type = Type::STRING;
+                              string val( "" );
+                              default_value.set_value( val );
+                              valid = true;
+                            }
+                            if( str_type == "INT_ARRAY" ){
+                              type = Type::ARRAY;
+                              list<int> val;
+                              default_value.set_value( val );
+                              valid = true;
+                            }
+                          }while( !valid );
 
-        while ( end != 1 ){
-          bool valid = false; 
-          do{
-            std::cout << std::endl;
-            std::cout << "  Введите имя поля или Enter > ";
-            _s = str_input().c_str();
-            if( _s == "" ){
-              if( end == -1 ){
-                std::cout << "  Задайте хотя-бы 1 поле" << std::endl;
-              }else{
+                          db[id].fields.insert( pos, name );
+                          db[id].types.insert( pos, type );
 
-                std::cout << std::endl;
-                end = 1;
+                          std::cout << "     Установить значения по умолчанию? (Д/Н) > ";
+                          string choose; choose = str_input().c_str(); 
+                          if( choose == "Д" || choose == "д" || choose == "Y" || choose == "y" ){
+                            for( int i = 0; i < db[id].objects.length(); i++ )
+                              db[id].objects[i].insert( pos, default_value );
+                          }
+                          if( choose == "Н" || choose == "н" || choose == "N" || choose == "n" || choose == "" ){
+                            value empty_value;
+                            for( int i = 0; i < db[id].objects.length(); i++ )
+                              db[id].objects[i].insert( pos, empty_value );
+                          }
+                        }
+                break;}
+                case 3:{
+                        if( db.length() == 0 ){
+                          std::cout << "     Нет созданных таблиц\n" << std::endl;  
+                        }else{
+                          std::cout << "     Введите номер таблицы > ";
+                          int id = int_input() - 1;
+                          std::cout << "     Поля таблицы" << std::endl;
+                          if( db[id].fields.length() <= 1 ){
+                            std::cout << "     У таблицы должно быть хотя бы поле " << std::endl;
+                            std::cout << "     Удаление полей невозможно " << std::endl;
+                          }else{
+                            std::cout << "     " << db[id].fields;
+                            std::cout << "     Какое поле удалить?" << std::endl;
+                            std::cout << "     Введите позицию поля > ";
+                            int pos = int_input() - 1;
+                            db[id].fields.remove( pos );
+                            db[id].types.remove( pos );
+                            for( int i = 0; i < db[id].objects.length(); i++ )
+                              db[id].objects[i].remove( pos );
+                          }
+                        }
+                break;}
+                case 4:{
+                        std::cout << "     Введите имя таблицы > ";
+                        bool end = false; 
+                        int fields_count = 0;
+                        list< string > table_fields;
+                        list< Type::Type > table_types;
+                        string name; name = str_input().c_str();
+                        while ( !end ){
+                          bool expr = true;
+                          string name("");
+                          do{
+                            std::cout << "     Введите имя поля или Enter для конца ввода" << std::endl;
+                            std::cout << std::endl;
+                            std::cout << "     Введите имя поля > ";
+                            name = str_input().c_str();
+                            expr =  ( name == "" && fields_count == 0 );
+                            if( name == "" && fields_count == 0 )
+                              std::cout << "     Задайте хотя бы 1 поле" << std::endl;
+                          }while( expr );
+
+                          if( name != "" ){
+                            bool valid = false;
+                            Type::Type type;
+                            do{
+                              std::cout << "     Доступные типы:" << std::endl;
+                              std::cout << "     INT STRING INT_ARRAY " << std::endl;
+                              std::cout << "     Введите тип поля > ";
+                              string str_type; str_type = str_input().c_str(); 
+                              if( str_type == "INT" ){
+                                type = Type::INT;
+                                valid = true;
+                              }
+                              if( str_type == "STRING" ){
+                                type = Type::STRING;
+                                valid = true;
+                              }
+                              if( str_type == "INT_ARRAY" ){
+                                type = Type::ARRAY;
+                                valid = true;
+                              }
+                            }while( !valid );
+                            table_fields.add( name );
+                            table_types.add( type );
+                            fields_count++;
+                          }
+                          end = ( name == "" );
+                        }
+                        table t;
+                        t.set_name( name );
+                        t.set_fields( table_fields );
+                        t.set_types( table_types );
+                        db.add( t );
+
+                break;}
+                case 5:{
+                        if( db.length() == 0 ){
+                          std::cout << "     Нет созданных таблиц\n" << std::endl;  
+                        }else{
+                          std::cout << "     Введите нормер таблицы > ";
+                          int id = int_input() - 1;
+                          db.remove( id );
+                        }
+                break;}
+                case 6:{
+                        if( db.length() == 0 ){
+                          std::cout << "     Нет созданных таблиц\n" << std::endl;  
+                        }else{
+                          std::cout << "     Введите нормер таблицы > ";
+                          int id = int_input() - 1;
+                          selected = id;
+                          std::cout << "     Выбрана таблица " << db[id].name << " Поля:" << db[id].fields << std::endl;
+                          
+                        }
+                break;}
+                case 0:{
+                        menu = true;
+                break;}
               }
-            }else{
-              valid = true;
-            }
-          }while( !valid  && end != 1 );
-          if( end != 1 ){
-          
-          _f.add( _s );
-          valid = false;
-          do{
-            std::cout << std::endl;
-            std::cout << "  Доступные типы:" << std::endl;
-            std::cout << "  INT STRING INT_ARRAY " << std::endl;
-            std::cout << "  Введите тип > ";
-            _s = str_input().c_str();
-            if( _s == "INT" ){
-              _t.add( Type::INT );
-              valid = true;
-            }
-            if( _s == "STRING" ){
-              _t.add( Type::STRING );
-              valid = true;
-            }
-            if( _s == "INT_ARRAY" ){
-              _t.add( Type::ARRAY );
-              valid = true;
-            }
-          }while( !valid );
-
-          if( end = -1 )
-            end = 0;
-          }
-        }
-        t.set_fields( _f );
-        t.set_types( _t );
-        table_was_created = true;
-
-      }break;
+              }while( !menu ); menu = false;
+      break;}
       case 2:{
-        // ВЫВОД
-        if( table_was_created ){
-          int col = t.fields.length();
-           
-          list<int>width;
-          for( int i = 0; i < col; i++ ){
-            width.add( t.fields[i].length() ); 
-          }
-
-          for( int i = 0; i < t.objects.length(); i++ ){
-            for( int j = 0; j < col; j++ ){
-              int len = 0;
-              switch( t.objects[i][j].get_type() ){
-                case Type::INT:{
-                  int64_t num = t.objects[i][j].get_int();
-                    while( num ){
-                      len++;
-                      num /= 10;
-                    }
-                    if( t.objects[i][j].get_int() == 0 ){
-                    len = 1;
-                    }
-                    if( t.objects[i][j].get_int() < 0 ){
-                      len += 1;
-                    }
-                  }break;
-                case Type::STRING:
-                  len = t.objects[i][j].get_string().length();
-                  break;
-                case Type::ARRAY:
-                  list<int> arr_tmp = t.objects[i][j].get_array();
-                  for( int i = 0; i < arr_tmp.length(); i++ ){
-                    int num = arr_tmp[i];
-                    int _num = num;
-                    len++;
-                    while( _num ){
-                      len++;
-                      _num/=10;
-                    }
-                    if ( num == 0 )
-                      len++;
-                    if ( num <  0 )
-                      len++;
-                  }
-                    len--;
-                  break;
-              
-
+              if( db.length() == 0 ){
+                std::cout << "     Не создано ни одной таблицы " << std::endl;
+                std::cout << "     Создайте хотя бы одну таблицу в пункте меню 1" << std::endl;
+              }else if( selected == -1 ){
+                std::cout << "     Не выбрана ни одна таблица из имеющихся" << std::endl;
+                std::cout << "     Выберете требуемую таблицу в пункте меню 1" << std::endl;
+              }else{
+                do{
+                print_menu2();
+                int ch = int_input();
+                clean_screen();
+                switch( ch ){
+                  case 1:{
+                          std::cout << std::endl;
+                          std::cout << "     Введите имя файла > ";
+                          string filename; filename = str_input().c_str();
+                          std::ofstream file( filename.c_str() );
+                          print_table( db[selected], file );
+                          file.close();
+                  break;}
+                  case 2:{
+                          std::cout << std::endl;
+                          std::cout << "     Введите имя файла > ";
+                          string filename; filename = str_input().c_str();
+                          std::ofstream file( filename.c_str() );
+                          write_table( db[selected], file );
+                          file.close();
+                  break;}
+                  case 3:{
+                          std::cout << std::endl;
+                          std::cout << "     Введите имя файла > ";
+                          string filename; filename = str_input().c_str();
+                          std::ofstream file( filename.c_str(), std::ios::binary  );
+                          write_table( db[selected], file, '\a' );
+                          file.close();
+                  break;}
+                  case 4:{
+                          std::cout << std::endl;
+                          std::cout << "     Введите имя файла > ";
+                          string filename; filename = str_input().c_str();
+                          std::ifstream file( filename.c_str() );
+                          table t;
+                          try{ t = load_table( file ); }catch( std::runtime_error& err ){
+                            std::cout << err.what() << std::endl;
+                          }
+                          db.add( t );
+                          file.close();
+                  break;}
+                  case 5:{
+                          std::cout << std::endl;
+                          std::cout << "     Введите имя файла > ";
+                          string filename; filename = str_input().c_str();
+                          std::ifstream file( filename.c_str(), std::ios::binary );
+                          table t;
+                          try{ t = load_table( file, '\a' ); }catch( std::runtime_error& err ){
+                            std::cout << err.what() << std::endl;
+                          }
+                          db.add( t );
+                          file.close();
+                  break;}
+                  case 6:{
+                          std::cout << std::endl;
+                          std::cout << "     Введите имя исходного файла > ";
+                          string filename; filename = str_input().c_str();
+                          std::cout << "     Введите имя исходного файла > ";
+                          string filename1; filename1 = str_input().c_str();
+                          std::ifstream file( filename.c_str() );
+                          table t;
+                          try{ t = load_table( file ); }catch( std::runtime_error& err ){
+                            std::cout << err.what() << std::endl;
+                          }
+                          file.close();
+                          std::ofstream file1( filename1.c_str(), std::ios::binary  );
+                          write_table( t, file1, '\a' );
+                          file1.close();
+                  break;}
+                  case 7:{
+                          std::cout << std::endl;
+                          std::cout << "     Введите имя исходного файла > ";
+                          string filename; filename = str_input().c_str();
+                          std::cout << "     Введите имя исходного файла > ";
+                          string filename1; filename1 = str_input().c_str();
+                          std::ifstream file( filename.c_str(),  std::ios::binary  );
+                          table t;
+                          try{ t = load_table( file, '\a' ); }catch( std::runtime_error& err ){
+                            std::cout << err.what() << std::endl;
+                          }
+                          file.close();
+                          std::ofstream file1( filename1.c_str() );
+                          write_table( t, file1 );
+                          file1.close();
+                  break;}
+                  case 0:{
+                          menu = true;
+                  break;}
+                }
+                }while( !menu ); menu = false;
               }
-              if( len > width[j] )
-                width[j] = len;
-            }
-          }
-
-          /* табличка должна выглядить как-то так
-           ╔════════╤═══╗
-           ║LONGBRUH│ A ║
-           ╟────────┼───╢
-           ║  BRUH1 │ABC║
-           ╟────────┼───╢
-           ║  BRUH2 │ C ║
-           ╚════════╧═══╝ 
-          */
-
-          std::cout << "╔";
-          for( int i = 0; i < col; i++ ){
-            for( int j = 0; j < width[i]; j++ ){
-              std::cout << "═";
-            } 
-            std::cout <<  ( ( i + 1 == col ) ? "╗" : "╤" ) ;
-          }
-          std::cout << std::endl;
-          
-          std::cout << "║";
-          for( int i = 0; i < col; i++ ){
-            print_center( t.fields[i], width[i] );
-            std::cout << ( ( i + 1 == col ) ? "║" : "│" );
-          }
-          std::cout << std::endl;
-
-          value val;
-          for( int i = 0; i < t.objects.length(); i++ ){
-            std::cout << "╟";
-            for( int i = 0; i < col; i++ ){
-              for( int j = 0; j < width[i]; j++ ){
-                std::cout << "─";
-              } 
-              std::cout <<  ( ( i + 1 == col ) ? "╢" : "┼" ) ;
-            }
-            std::cout << std::endl;
-
-            std::cout << "║";
-            for( int j = 0; j < t.fields.length(); j++ ){
-              val = t.objects[i][j];
-              switch( val.get_type() ){
-                case Type::INT:
-                  print_center( val.get_int(), width[j] );
-                  break;
-                case Type::STRING:
-                  print_center( val.get_string(), width[j] );
-                  break;
-                case Type::ARRAY:
-                  print_center( val.get_array(), width[j] );
-                  break;
-              
-              }
-              std::cout << ( ( j + 1 == col ) ? "║" : "│" );
-            }
-            std::cout << std::endl;
-
-          }
-
-          std::cout << "╚";
-          for( int i = 0; i < col; i++ ){
-            for( int j = 0; j < width[i]; j++ ){
-              std::cout << "═";
-            } 
-            std::cout <<  ( ( i + 1 == col ) ? "╝" : "╧" ) ;
-          }
-          std::cout << std::endl;
-
-        
-        }else{
-          std::cout << "\n  Сначала создадите таблицу\n" << std::endl;
-        }
-
-        }break;
-
+      break;}
       case 3:{
-        // Добавление записи
-        list< value > *obj = new list< value >();
-        for( int i = 0; i < t.fields.length(); i++ ){
-          std::cout << std::endl;
-          std::cout << "  Имя поля " << t.fields[i].c_str() << std::endl;
-          switch( t.types[i] ){
-            case Type::INT:
-              _s = "Int";
-              break;
-            case Type::STRING:
-              _s = "String";
-              break;
-            case Type::ARRAY:
-              _s = "Array";
-              break;
-          }
-          std::cout << "  Тип поля " << _s.c_str() << std::endl;
+              do{
+              print_menu3();
+              int ch = int_input();
+              clean_screen();
+              switch( ch ){
+                case 1:{
+                break;}
+                case 2:{
+                break;}
+                case 0:{
+                        menu = true;
+                break;}
+              }
+              }while( !menu ); menu = false;
+      break;}
+      case 4:{
+              do{
+              print_menu4();
+              int ch = int_input();
+              clean_screen();
+              switch( ch ){
+                case 1:{
+                break;}
+                case 2:{
+                break;}
+                case 3:{
+                break;}
+                case 4:{
+                break;}
+                case 5:{
+                break;}
+                case 0:{
+                        menu = true;
+                break;}
+              }
+              }while( !menu ); menu = false;
+      break;}
+      case 0:{
+              exit = true;
 
-        value *v;
-        switch( t.types[i] ){
-          case Type::INT:{
-            int64_t *int_tmp = new int64_t;
-            std::cout << "  Введите число > ";
-            *int_tmp = int_input();
-            v = new value( *int_tmp );
-            }break;
-          case Type::STRING:{
-            string *str = new string();
-            std::cout << "  Введите строку > ";
-            _s = str_input().c_str();
-            *str = _s;
-            v = new value( *str );
-            }break;
-          case Type::ARRAY:{
-            std::cout << "  Введите числа через пробел > ";
-            list<int> *arr_tmp = new list<int>;
-            *arr_tmp = arr_input();
-            v = new value( *arr_tmp );
-            }break;
-        }
-
-        obj->add( *v );
-
-        }
-          t.add( *obj ); 
-          std::cout << std::endl;
-        }break;
-      case 6:
-        exit = true;
-        break;
-
+      break;}
+    
+    
     }
   }while( !exit );
-
-
-
   return 0;
 }

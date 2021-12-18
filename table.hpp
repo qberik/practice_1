@@ -11,6 +11,7 @@ class table{
 
   public:
     table();
+    table& operator=( const table & );
 
     void set_name( string );
     void set_fields( list< string > );
