@@ -17,6 +17,9 @@
   #include <windows.h>
 #endif
 
+#define SEPARATOR_FOR_BINARY_FILES '\a'
+
+
 int main(){
   #ifdef WINDOWS
     SetConsoleOutputCP(CP_UTF8);
@@ -291,15 +294,22 @@ int main(){
                           std::cout << std::endl;
                           std::cout << "     Введите имя файла > ";
                           string filename; filename = str_input().c_str();
-                          std::ofstream file( filename.c_str(), std::ios::binary  );
-                          write_table( db[selected], file, '\a' );
+                          std::ofstream file( filename.c_str() );
+                          write_table( db[selected], file, SEPARATOR_FOR_BINARY_FILES );
                           file.close();
                   break;}
                   case 4:{
-                          std::cout << std::endl;
-                          std::cout << "     Введите имя файла > ";
-                          string filename; filename = str_input().c_str();
-                          std::ifstream file( filename.c_str() );
+                          bool file_not_exist = false;
+                          std::ifstream file; 
+                          do{
+                            if( file_not_exist )
+                              std::cout << "     Такого файла не существует " << std::endl;
+                            std::cout << std::endl;
+                            std::cout << "     Введите имя файла > ";
+                            string filename; filename = str_input().c_str();
+                            file.open( filename.c_str() );
+                            file_not_exist = file.fail();
+                          }while( file_not_exist );
                           table t;
                           try{ t = load_table( file ); }catch( std::runtime_error& err ){
                             std::cout << err.what() << std::endl;
@@ -308,42 +318,63 @@ int main(){
                           file.close();
                   break;}
                   case 5:{
-                          std::cout << std::endl;
-                          std::cout << "     Введите имя файла > ";
-                          string filename; filename = str_input().c_str();
-                          std::ifstream file( filename.c_str(), std::ios::binary );
+                          bool file_not_exist = false;
+                          std::ifstream file; 
+                          do{
+                            if( file_not_exist )
+                              std::cout << "     Такого файла не существует " << std::endl;
+                            std::cout << std::endl;
+                            std::cout << "     Введите имя файла > ";
+                            string filename; filename = str_input().c_str();
+                            file.open( filename.c_str() );
+                            file_not_exist = file.fail();
+                          }while( file_not_exist );
                           table t;
-                          try{ t = load_table( file, '\a' ); }catch( std::runtime_error& err ){
+                          try{ t = load_table( file, SEPARATOR_FOR_BINARY_FILES ); }catch( std::runtime_error& err ){
                             std::cout << err.what() << std::endl;
                           }
                           db.add( t );
                           file.close();
                   break;}
                   case 6:{
-                          std::cout << std::endl;
-                          std::cout << "     Введите имя исходного файла > ";
-                          string filename; filename = str_input().c_str();
-                          std::cout << "     Введите имя исходного файла > ";
+                          bool file_not_exist = false;
+                          std::ifstream file; 
+                          do{
+                            if( file_not_exist )
+                              std::cout << "     Такого файла не существует " << std::endl;
+                            std::cout << std::endl;
+                            std::cout << "     Введите имя исходного файла > ";
+                            string filename; filename = str_input().c_str();
+                            file.open( filename.c_str() );
+                            file_not_exist = file.fail();
+                          }while( file_not_exist );
+                          std::cout << "     Введите имя конечного файла > ";
                           string filename1; filename1 = str_input().c_str();
-                          std::ifstream file( filename.c_str() );
                           table t;
                           try{ t = load_table( file ); }catch( std::runtime_error& err ){
                             std::cout << err.what() << std::endl;
                           }
                           file.close();
                           std::ofstream file1( filename1.c_str(), std::ios::binary  );
-                          write_table( t, file1, '\a' );
+                          write_table( t, file1, SEPARATOR_FOR_BINARY_FILES );
                           file1.close();
                   break;}
                   case 7:{
-                          std::cout << std::endl;
-                          std::cout << "     Введите имя исходного файла > ";
-                          string filename; filename = str_input().c_str();
-                          std::cout << "     Введите имя исходного файла > ";
+                          bool file_not_exist = false;
+                          std::ifstream file; 
+                          do{
+                            if( file_not_exist )
+                              std::cout << "     Такого файла не существует " << std::endl;
+                            std::cout << std::endl;
+                            std::cout << "     Введите имя исходного файла > ";
+                            string filename; filename = str_input().c_str();
+                            file.open( filename.c_str() );
+                            file_not_exist = file.fail();
+                          }while( file_not_exist );
+                          std::cout << "     Введите имя конечного файла > ";
                           string filename1; filename1 = str_input().c_str();
-                          std::ifstream file( filename.c_str(),  std::ios::binary  );
                           table t;
-                          try{ t = load_table( file, '\a' ); }catch( std::runtime_error& err ){
+                          try{ t = load_table( file, SEPARATOR_FOR_BINARY_FILES ); }catch( std::runtime_error& err ){
                             std::cout << err.what() << std::endl;
                           }
                           file.close();
