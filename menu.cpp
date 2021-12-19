@@ -37,8 +37,9 @@ void print_menu(){
   cout << "                                " << endl;
   cout << "     1. Управление таблицами    " << endl;
   cout << "     2. Работа с файлами        " << endl;
-  cout << "     3. Создание запроса        " << endl;
-  cout << "     4. Изменение таблицы       " << endl;
+  cout << "     3. Вывести таблицу         " << endl;
+  cout << "     4. Создание запроса        " << endl;
+  cout << "     5. Изменение таблицы       " << endl;
   cout << "     0. Выйти из программы      " << endl;
   cout << "                                " << endl;
   cout << "     Введите номер пункта > ";
@@ -72,7 +73,7 @@ void print_menu2(){
   cout << "     Введите номер пункта > ";
 }
 
-void print_menu3(){
+void print_menu4(){
   cout << "                                      " << endl;
   cout << "     1. Выполнить запрос по умолчанию " << endl;
   cout << "     2. Создать свой запрос           " << endl;
@@ -82,7 +83,7 @@ void print_menu3(){
 
 }
 
-void print_menu4(){
+void print_menu5(){
   cout << "                                " << endl;
   cout << "     1. Выбрать таблицу         " << endl;
   cout << "     2. Довабить запись         " << endl;

@@ -390,8 +390,11 @@ int main(){
               }
       break;}
       case 3:{
+              print_table( db[selected] );
+      break;}
+      case 4:{
               do{
-              print_menu3();
+              print_menu4();
               int ch = int_input();
               clean_screen();
               switch( ch ){
@@ -405,9 +408,9 @@ int main(){
               }
               }while( !menu ); menu = false;
       break;}
-      case 4:{
+      case 5:{
               do{
-              print_menu4();
+              print_menu5();
               int ch = int_input();
               clean_screen();
               switch( ch ){

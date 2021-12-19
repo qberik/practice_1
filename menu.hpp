@@ -8,8 +8,8 @@
 void print_menu( );
 void print_menu1( );
 void print_menu2( );
-void print_menu3( );
 void print_menu4( );
+void print_menu5( );
 void item1_stage1();
 
 void print_table( table &, std::ostream & = std::cout );
