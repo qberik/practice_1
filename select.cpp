@@ -334,7 +334,7 @@ list< list<T>> filter(  list<list<T>> objs, list<string> fields, list<Type::Type
         }
         break;}
         case Type::STRING:{
-          if( !( opers[i] == 1 or opers[i] == 6 ) )
+          if( !( opers[i] == 1 || opers[i] == 6 ) )
             throw std::runtime_error( "wrong type of comarsion for string" );
           list<string> _vals;
           T _t;
