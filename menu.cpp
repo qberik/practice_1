@@ -20,6 +20,22 @@
 #define endl std::endl
 
 
+static int str_to_int( string s ){
+  int64_t a = 0;
+  int factor = 1;
+  for( int i = 0; i < s.length(); i++ ){
+    if( isdigit( s[ s.length() - 1 - i ] ) ){
+      a += ( s[ s.length() - 1 - i ] - '0' ) * factor;
+      factor *= 10;
+    }else{
+      if( s[ s.length() - 1 - i ] == '-' ){
+        a *= -1;
+      }
+    }
+  }
+  return a;
+}
+
 
 
 void clean_screen(){
@@ -120,14 +136,14 @@ table load_table( std::istream &in, char sep ){
   string DBS = tokens[index++];
   if ( DBS != "DBS")
     throw std::runtime_error("     Неверный файл базы данных");
-  int col = string_to_int( tokens[index++] );
+  int col = str_to_int( tokens[index++] );
   string name = tokens[index++];
   list< string > flds;
   list< Type::Type > typs;
   for( int i = 0; i < col; i++ )
     flds.add( tokens[index++] );
   for( int i = 0; i < col; i++ )
-    typs.add( static_cast<Type::Type> ( string_to_int( tokens[index++] ) ) );
+    typs.add( static_cast<Type::Type> ( str_to_int( tokens[index++] ) ) );
 
   list< list< value > > objs;
   while( index < tokens.length() ){
@@ -136,7 +152,7 @@ table load_table( std::istream &in, char sep ){
       obj.clear();
       switch( typs[i] ){
         case Type::INT:{
-          int64_t num = string_to_int( tokens[index++] );
+          int64_t num = str_to_int( tokens[index++] );
           value v( num );
           obj.add( v );    
         break;} 
@@ -151,7 +167,7 @@ table load_table( std::istream &in, char sep ){
             unbracked += val[j];
           list< string > vals = unbracked.split(',');
           for( int j = 0; j < vals.length(); j++ )
-            arr->add( string_to_int( vals[j] ) );
+            arr->add( str_to_int( vals[j] ) );
           value v( *arr );
           obj.add( v );
         break;} 

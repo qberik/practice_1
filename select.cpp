@@ -6,7 +6,7 @@
 #include "table.hpp"
 #include <stdexcept>
 
-int str_to_int( string s ){
+static int str_to_int( string s ){
   int64_t a = 0;
   int factor = 1;
   for( int i = 0; i < s.length(); i++ ){
