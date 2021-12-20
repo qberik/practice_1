@@ -6,6 +6,22 @@
 #include "table.hpp"
 #include <stdexcept>
 
+int str_to_int( string s ){
+  int64_t a = 0;
+  int factor = 1;
+  for( int i = 0; i < s.length(); i++ ){
+    if( isdigit( s[ s.length() - 1 - i ] ) ){
+      a += ( s[ s.length() - 1 - i ] - '0' ) * factor;
+      factor *= 10;
+    }else{
+      if( s[ s.length() - 1 - i ] == '-' ){
+        a *= -1;
+      }
+    }
+  }
+  return a;
+}
+
 bool is_keyword( string w ){
   string keywords("SELECT AS FROM WHERE HAVING DESC");
   list<string> keys = keywords.split();
@@ -73,7 +89,7 @@ float compute_func( list<int> obj, string w ){
         if( !( ( _tmp_str[i] <= '9' && _tmp_str[i] >= '0' ) || _tmp_str[i] == '-' )  )
           is_num = false;
       if( _tmp_list.length() > 1 && is_num ){
-        int num = string_to_int( _tmp_str );
+        int num = str_to_int( _tmp_str );
         for( int i = 0; i < obj.length(); i++ )
           if( obj[i] == num )
             res++;
@@ -271,7 +287,7 @@ list< list<T>> filter(  list<list<T>> objs, list<string> fields, list<Type::Type
                 is_num = false;
             //std::cout << "HERE STILL OK WITH " << i << ' ' << j << ' ' << is_num <<  std::endl;
             if( is_num ){
-              _vals[j] = string_to_int( vals[i][j] );
+              _vals[j] = str_to_int( vals[i][j] );
             }else if( is_func( vals[i][j] ) ){
               string _tmp_str("");
               for( int k = vals[i][j].find("(") + 1; k < vals[i][j].find(")"); k++ )
@@ -438,7 +454,7 @@ table sql( list<table> db, string rq ){
           is_num = false;     
       if( is_num ){
         is_top = true;
-        top_num = string_to_int( tokens[i] );
+        top_num = str_to_int( tokens[i] );
       }else{
         i-=2; 
       
