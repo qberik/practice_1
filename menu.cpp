@@ -85,8 +85,8 @@ void print_menu4(){
 
 void print_menu5(){
   cout << "                                " << endl;
-  cout << "     1. Выбрать таблицу         " << endl;
-  cout << "     2. Довабить запись         " << endl;
+  cout << "     1. Напечатаь таблицу       " << endl;
+  cout << "     2. Добавить запись         " << endl;
   cout << "     3. Изменить запись         " << endl;
   cout << "     4. Удалить запись          " << endl;
   cout << "     5. Сортировка записей      " << endl;

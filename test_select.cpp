@@ -81,14 +81,16 @@ int main(){
   //s = "SELECT Год рождения, Курс, MAX(Баллы, Оценки ) FROM Ученики WHERE 4 > 3";
   
   //s = "SELECT Имя, Год рождения, Курс FROM Ученики  ORDER BY Имя"; //, Год рождения, ORDER BY Имя";
-  s = "SELECT SUM( Оценки ), Курс FROM Ученики GROUP BY Курс ORDER BY Курс ";
+  //s = "SELECT SUM( Оценки ), Курс FROM Ученики GROUP BY Курс ORDER BY Курс ";
   //s = "SELECT SUM(Оценки) , MIN(Баллы, Оценки ) , Год рождения FROM Ученики GROUP BY Год рождения";
   //s = "SELECT SUM(Оценки) , SUM(Баллы) FROM Ученики WHERE SUM(Оценки, Баллы) < -100";
 
+  s = "SELECT * FROM Ученики ";
   table tb;
   tb = sql( db, s );
 
-
+  
+  std::cout << "RESPONSE" << std::endl;
   std::cout << tb.fields << std::endl;
   std::cout << tb.types << std::endl;
   std::cout << tb.objects << std::endl;

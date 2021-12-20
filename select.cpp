@@ -638,6 +638,8 @@ table sql( list<table> db, string rq ){
     }
   }
 
+  //std::cout << expanded_cols << std::endl;
+
   rs = data;//t.getCols( expanded_cols );
 
   //std::cout << rs << std::endl;
@@ -813,7 +815,7 @@ table sql( list<table> db, string rq ){
     rs.clear(); value empy_value;
     for( int i = 0; i < temp_rs.length(); i++ ){
       __rs.clear();
-      for( int j = 0; j < cols.length(); j++ ){
+      for( int j = 0; j < expanded_cols.length(); j++ ){
         __rs.add(empy_value);
       }
       rs.add( __rs );
@@ -822,11 +824,11 @@ table sql( list<table> db, string rq ){
     
     for( int i = 0; i < temp_rs.length(); i++ ){
       //_temp_obj.clear();
-      for( int j = 0; j < cols.length(); j++ ){
-        if( is_func( cols[j] ) ){
+      for( int j = 0; j < expanded_cols.length(); j++ ){
+        if( is_func( expanded_cols[j] ) ){
           string _tmp_str("");
-          for( int k = cols[j].find("(") + 1; k < cols[j].find(")"); k++ ){
-            _tmp_str += cols[j][k]; 
+          for( int k = expanded_cols[j].find("(") + 1; k < cols[j].find(")"); k++ ){
+            _tmp_str += expanded_cols[j][k]; 
           }
           _tmp_str.strip();
           list< string > _tmp_list = _tmp_str.split(',');
@@ -846,15 +848,15 @@ table sql( list<table> db, string rq ){
             }
                
           }
-          int64_t *num = new int64_t(  compute_func( _tmp_val, cols[j] ));
+          int64_t *num = new int64_t(  compute_func( _tmp_val, expanded_cols[j] ));
           rs[i][j].set_value( *num );
         }else{
-          if( cols[j] == group_expr ){
-            int id = flds.find( cols[j] ); 
+          if( expanded_cols[j] == group_expr ){
+            int id = flds.find( expanded_cols[j] ); 
             rs[i][j] = temp_rs[i][id][0];
           }else{
             string error("Cant get field ");
-            error += cols[j];
+            error += expanded_cols[j];
             error += " while grouping by ";
             error += group_expr;
             std::runtime_error( error.c_str() );
@@ -975,21 +977,20 @@ table sql( list<table> db, string rq ){
     }
 
 
-
     list<list<value>> res_rs;
     list<value> __res_rs;
     value empty_value;
-    for( int i = 0; i < cols.length(); i++ )
+    for( int i = 0; i < expanded_cols.length(); i++ )
       __res_rs.add(empty_value);
     for( int i = 0; i < rs.length(); i++ )
       res_rs.add( __res_rs ); 
     //std::cout << "rs " << rs.length() << std::endl;
     for( int i = 0; i < rs.length(); i++ ){
-      for( int j = 0; j < cols.length(); j++ ){
-        if( is_func( cols[j] ) ){
+      for( int j = 0; j < expanded_cols.length(); j++ ){
+        if( is_func( expanded_cols[j] ) ){
           string _tmp_str("");
-          for( int k = cols[j].find("(") + 1; k < cols[j].find(")"); k++ ){
-            _tmp_str += cols[j][k]; 
+          for( int k = expanded_cols[j].find("(") + 1; k < expanded_cols[j].find(")"); k++ ){
+            _tmp_str += expanded_cols[j][k]; 
           }
           _tmp_str.strip();
           list< string > _tmp_list = _tmp_str.split(',');
@@ -1008,23 +1009,27 @@ table sql( list<table> db, string rq ){
                 string error("cant get agregat funcion if field ");
                 error += _tmp_list[k];
                 error += " in equasion ";
-                error += cols[j];
+                error += expanded_cols[j];
                 std::runtime_error( error.c_str() );
               }
               _tmp_val.add( rs[i][id] );
             }
           }
-          int64_t *num = new int64_t(  compute_func( _tmp_val, cols[j] ));
+          int64_t *num = new int64_t(  compute_func( _tmp_val, expanded_cols[j] ));
           res_rs[i][j].set_value( *num );
 
         }else{
-          int id = flds.find( cols[j] );
+          int id = flds.find( expanded_cols[j] );
           res_rs[i][j] =  rs[i][id];
         }
       }
     }
     rs = res_rs;
   }
+
+
+
+
 
   //std::cout << "cols are " << cols << std::endl;
   for( int i = 0; i < cols.length(); i++ ){
@@ -1043,8 +1048,8 @@ table sql( list<table> db, string rq ){
   
   list< string > _flds;
   list< Type::Type > _typs;
-  for( int i = 0; i < rs.length(); i++ ){
-    _flds.add( cols[i] );
+  for( int i = 0; i < expanded_cols.length(); i++ ){
+    _flds.add( expanded_cols[i] );
     _typs.add( rs[0][i].get_type() );
   }
   table _t;

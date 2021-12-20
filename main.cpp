@@ -13,6 +13,7 @@
 #include "list.hpp"
 #include "value.hpp"
 #include "string.hpp"
+#include "select.cpp"
 #ifdef WINDOWS
   #include <windows.h>
 #endif
@@ -31,7 +32,7 @@ int main(){
 
   bool preset = true;
   if( preset ){
-    string nam( "Test table" );
+    string nam( "TAT" );
 
     list< string > fld;
     string f1("A"); fld.add(f1);
@@ -399,8 +400,27 @@ int main(){
               clean_screen();
               switch( ch ){
                 case 1:{
+                        string rq; rq = "SELECT * FROM ";
+                        rq += db[selected].name;
+                        std::cout << "     Запрос по умолчанию: " << rq;
+                        std::cout << std::endl;
+                        std::cout << "     Результат" << std::endl;
+                        table t;
+                        try{ t = sql( db, rq );  }catch( std::runtime_error &err ){
+                          std::cout << err.what() << std::endl;
+                        }
+                        print_table( t );
                 break;}
                 case 2:{
+                        std::cout << "     Введите запрос > ";
+                        string rq; rq = str_input().c_str();
+                        std::cout << std::endl;
+                        std::cout << "     Результат" << std::endl;
+                        table t;
+                        try{ t = sql( db, rq );  }catch( std::runtime_error &err ){
+                          std::cout << err.what() << std::endl;
+                        }
+                        print_table( t );
                 break;}
                 case 0:{
                         menu = true;
@@ -415,14 +435,118 @@ int main(){
               clean_screen();
               switch( ch ){
                 case 1:{
+                        print_table( db[selected] );
                 break;}
                 case 2:{
+                        list< value > obj;
+                        for( int i = 0; i < db[selected].fields.length(); i++ ){
+                          std::cout << "     Введите " << ( i + 1 ) << "-е поле объекта " << std::endl;
+                          switch( db[selected].types[i] ){
+                            case Type::INT:{
+                                            std::cout << "     Тип поля Число" << std::endl;
+                                            std::cout << "     Введите элемент > ";
+                                            int64_t num = int_input();   
+                                            value *v = new value( num );
+                                            obj.add( *v );
+                            break;} 
+                            case Type::STRING:{
+                                            std::cout << "     Тип поля Срока" << std::endl;
+                                            std::cout << "     Введите элемент > ";
+                                            string s; s = str_input().c_str();
+                                            value *v = new value( s );
+                                            obj.add( *v );
+                            break;} 
+                            case Type::ARRAY:{
+                                            std::cout << "     Тип поля Массив\n     Вводите числа через пробел" << std::endl;
+                                            std::cout << "     Введите элемент > ";
+                                            list< int > arr = arr_input();
+                                            value *v = new value( arr );
+                                            obj.add( *v );
+                            break;} 
+                          }
+                        }
+                        db[selected].add( obj );
                 break;}
                 case 3:{
+                        std::cout << "     Введите номер записи, который нужно заменить " << std::endl;
+                        std::cout << std::endl;
+                        std::cout << "     Номер записи > ";
+                        int id = int_input() - 1;
+                        list< value > obj;
+                        for( int i = 0; i < db[selected].fields.length(); i++ ){
+                          std::cout << "     Введите " << ( i + 1 ) << "-е поле нового объекта " << std::endl;
+                          switch( db[selected].types[i] ){
+                            case Type::INT:{
+                                            std::cout << "     Тип поля Число" << std::endl;
+                                            std::cout << "     Введите элемент > ";
+                                            int64_t num = int_input();   
+                                            value *v = new value( num );
+                                            obj.add( *v );
+                            break;} 
+                            case Type::STRING:{
+                                            std::cout << "     Тип поля Срока" << std::endl;
+                                            std::cout << "     Введите элемент > ";
+                                            string s; s = str_input().c_str();
+                                            value *v = new value( s );
+                                            obj.add( *v );
+                            break;} 
+                            case Type::ARRAY:{
+                                            std::cout << "     Тип поля Массив\n     Вводите числа через пробел" << std::endl;
+                                            std::cout << "     Введите элемент > ";
+                                            list< int > arr = arr_input();
+                                            value *v = new value( arr );
+                                            obj.add( *v );
+                            break;} 
+                          }
+                        }
+                        db[selected].edit( id, obj );                         
                 break;}
                 case 4:{
+                        std::cout << "     Введите номер записи, который нужно заменить " << std::endl;
+                        std::cout << std::endl;
+                        std::cout << "     Номер записи > ";
+                        int id = int_input() - 1;
+                        db[selected].remove( id );
                 break;}
                 case 5:{
+                        std::cout << "     Таблица имеет поля" << std::endl;
+                        std::cout << "     " << db[selected].fields << std::endl;
+                        std::cout << "     Поля имеют типы" << std::endl;
+                        std::cout << "     ";
+                        for( int i = 0; i < db[selected].fields.length(); i++ ){
+                          switch( db[selected].types[i] ){
+                            case Type::INT:{
+                                            std::cout << "число ";
+                            break;}
+                            case Type::STRING:{
+                                            std::cout << "строка ";
+                            break;}
+                            case Type::ARRAY:{
+                                            std::cout << "массив ";
+                            break;}
+                          }
+                        }
+                        std::cout << std::endl;
+                        std::cout << "     Сортировка возможна по полям типов: число, строка " << std::endl;
+                        std::cout << "     Введите номер поля > ";
+                        int id = int_input() - 1;
+                        std::cout << "     Сотрировать прямо или обратно > ";
+                        string s; s = str_input().c_str();
+                        bool rev = false;
+                        if( s == "обратно" || s == "Обратно" ){
+                          rev = true; 
+                        }
+                        string rq("SELECT * FROM ");
+                        rq += db[selected].name;
+                        rq += " ORDER BY ";
+                        rq += db[selected].fields[id];
+                        if( rev )
+                          rq += " DESC";
+                        table t;
+                        try{ t = sql( db, rq );
+                        db[selected] = t; }catch( std::runtime_error &err ){
+                          std::cout << err.what() << std::endl;
+                        }
                 break;}
                 case 0:{
                         menu = true;
