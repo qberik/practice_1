@@ -153,8 +153,15 @@ int main(){
                         if( db.length() == 0 ){
                           std::cout << "     Нет созданных таблиц\n" << std::endl;  
                         }else{
-                          std::cout << "     Введите номер таблицы > ";
-                          int id = int_input() - 1;
+                          int id = -1;
+                          do{
+                            if ( id == 0 ){
+                              std::cout << "     Обратите внимание!" << std::endl; 
+                              std::cout << "     Номер таблицы это ЧИСЛО, а не её имя" << std::endl; 
+                            }
+                            std::cout << "     Введите номер таблицы > ";
+                          id = int_input(); }while( id == 0 ); id--;
+
                           std::cout << "     После какого поля вставить новое? " << std::endl; 
                           std::cout << "     По умолчанию в конец (" << db[id].fields.length()  << ")" << std::endl; 
                           std::cout << "     Введите позицию поля > ";
@@ -177,8 +184,8 @@ int main(){
                             }
                             if( str_type == "STRING" ){
                               type = Type::STRING;
-                              string val( "" );
-                              default_value.set_value( val );
+                              string *val = new string( " " );
+                              default_value.set_value( *val );
                               valid = true;
                             }
                             if( str_type == "INT_ARRAY" ){
@@ -209,17 +216,35 @@ int main(){
                         if( db.length() == 0 ){
                           std::cout << "     Нет созданных таблиц\n" << std::endl;  
                         }else{
-                          std::cout << "     Введите номер таблицы > ";
-                          int id = int_input() - 1;
+                          int id = -1;
+                          do{
+                            if ( id == 0 ){
+                              std::cout << "     Обратите внимание!" << std::endl; 
+                              std::cout << "     Номер таблицы это ЧИСЛО, а не её имя" << std::endl; 
+                            }
+                            std::cout << "     Введите номер таблицы > ";
+                          id = int_input(); }while( id == 0 ); id--;
+
+
+
+
                           std::cout << "     Поля таблицы" << std::endl;
                           if( db[id].fields.length() <= 1 ){
                             std::cout << "     У таблицы должно быть хотя бы поле " << std::endl;
                             std::cout << "     Удаление полей невозможно " << std::endl;
                           }else{
-                            std::cout << "     " << db[id].fields;
-                            std::cout << "     Какое поле удалить?" << std::endl;
-                            std::cout << "     Введите позицию поля > ";
-                            int pos = int_input() - 1;
+                            int pos = -1;
+                            do{
+                            if ( pos == 0 ){
+                              std::cout << "     Обратите внимание!" << std::endl;
+                              std::cout << "     Нужно ввести НОМЕР поля а не его имя" << std::endl;
+                            }
+                              std::cout << "     " << db[id].fields << std::endl;
+                              std::cout << "     Какое поле удалить?" << std::endl;
+                              std::cout << "     Введите позицию поля > ";
+                              pos = int_input();
+                            }while( pos == 0 );
+                            pos--;
                             db[id].fields.remove( pos );
                             db[id].types.remove( pos );
                             for( int i = 0; i < db[id].objects.length(); i++ )
@@ -228,7 +253,16 @@ int main(){
                         }
                 break;}
                 case 4:{
-                        std::cout << "     Введите имя таблицы > ";
+                        int id = -1;
+                        do{
+                          if ( id == 0 ){
+                            std::cout << "     Обратите внимание!" << std::endl; 
+                            std::cout << "     Номер таблицы это ЧИСЛО, а не её имя" << std::endl; 
+                          }
+                          std::cout << "     Введите номер таблицы > ";
+                        id = int_input(); }while( id == 0 ); id--;
+
+
                         bool end = false; 
                         int fields_count = 0;
                         list< string > table_fields;
@@ -285,8 +319,15 @@ int main(){
                         if( db.length() == 0 ){
                           std::cout << "     Нет созданных таблиц\n" << std::endl;  
                         }else{
-                          std::cout << "     Введите нормер таблицы > ";
-                          int id = int_input() - 1;
+                          int id = -1;
+                          do{
+                            if ( id == 0 ){
+                              std::cout << "     Обратите внимание!" << std::endl; 
+                              std::cout << "     Номер таблицы это ЧИСЛО, а не её имя" << std::endl; 
+                            }
+                            std::cout << "     Введите номер таблицы > ";
+                          id = int_input(); }while( id == 0 ); id--;
+
                           db.remove( id );
                         }
                 break;}
@@ -294,8 +335,15 @@ int main(){
                         if( db.length() == 0 ){
                           std::cout << "     Нет созданных таблиц\n" << std::endl;  
                         }else{
-                          std::cout << "     Введите нормер таблицы > ";
-                          int id = int_input() - 1;
+                          int id = -1;
+                          do{
+                            if ( id == 0 ){
+                              std::cout << "     Обратите внимание!" << std::endl; 
+                              std::cout << "     Номер таблицы это ЧИСЛО, а не её имя" << std::endl; 
+                            }
+                            std::cout << "     Введите номер таблицы > ";
+                          id = int_input(); }while( id == 0 ); id--;
+
                           selected = id;
                           std::cout << "     Выбрана таблица " << db[id].name << " Поля:" << db[id].fields << std::endl;
                           
@@ -498,8 +546,8 @@ int main(){
                             case Type::STRING:{
                                             std::cout << "     Тип поля Срока" << std::endl;
                                             std::cout << "     Введите элемент > ";
-                                            string s; s = str_input().c_str();
-                                            value *v = new value( s );
+                                            string *s = new string("") ; (*s) = str_input().c_str();
+                                            value *v = new value( *s );
                                             obj.add( *v );
                             break;} 
                             case Type::ARRAY:{
@@ -516,8 +564,18 @@ int main(){
                 case 3:{
                         std::cout << "     Введите номер записи, который нужно заменить " << std::endl;
                         std::cout << std::endl;
-                        std::cout << "     Номер записи > ";
-                        int id = int_input() - 1;
+
+                        int id = -1;
+                        do{
+                          if( id == 0 ){
+                            std::cout << "     Обратите внимание!" << std::endl;
+                            std::cout << "     Номер записи это ЧИСЛО" << std::endl;
+                          }
+                          std::cout << "     Номер записи > ";
+                          id = int_input();
+                        }while( id == 0); id--;
+
+
                         list< value > obj;
                         for( int i = 0; i < db[selected].fields.length(); i++ ){
                           std::cout << "     Введите " << ( i + 1 ) << "-е поле нового объекта " << std::endl;
@@ -548,10 +606,20 @@ int main(){
                         db[selected].edit( id, obj );                         
                 break;}
                 case 4:{
-                        std::cout << "     Введите номер записи, который нужно заменить " << std::endl;
+                        std::cout << "     Введите номер записи, который нужно удалить " << std::endl;
                         std::cout << std::endl;
-                        std::cout << "     Номер записи > ";
-                        int id = int_input() - 1;
+
+                        int id = -1;
+                        do{
+                          if( id == 0 ){
+                            std::cout << "     Обратите внимание!" << std::endl;
+                            std::cout << "     Номер записи это ЧИСЛО" << std::endl;
+                          }
+                          std::cout << "     Номер записи > ";
+                          id = int_input();
+                        }while( id == 0); id--;
+
+
                         db[selected].remove( id );
                 break;}
                 case 5:{

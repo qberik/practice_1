@@ -42,5 +42,8 @@ int main(){
   s[0][0] = 's';
   s[1] += '_';
   std::cout << "I print " << s[0].find("OM") << " AND " << s[1] << std::endl;
+
+  string test("");
+  std::cout << "Len of empty string is " << test.length() << std::endl;
   return 0;
 }

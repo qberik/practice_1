@@ -270,7 +270,7 @@ void print_table( table &t, std::ostream & out ){
         width[j] = len;
     } 
   }
-  
+
 
   out << "╔";
   for( int i = 0; i < col; i++ ){
