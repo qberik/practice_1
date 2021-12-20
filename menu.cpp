@@ -296,6 +296,10 @@ void print_table( table &t, std::ostream & out ){
         case Type::ARRAY:
           print_center( val.get_array(), width[j], out );
           break;
+        case Type::NONE:
+          string None("NONE");
+          print_center( None, width[j], out );
+          break;
       
       }
       out << ( ( j + 1 == col ) ? "║" : "│" );

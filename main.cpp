@@ -30,18 +30,26 @@ int main(){
   list< table > db;
   int selected = -1;
 
+
+
   bool preset = true;
   if( preset ){
-    string nam( "TAT" );
+    string nam( "Ученики" );
 
     list< string > fld;
-    string f1("A"); fld.add(f1);
-    string f2("B"); fld.add(f2);
-    string f3("C"); fld.add(f3);
+    string f1("Фамилия"); fld.add(f1);
+    string f2("Имя"); fld.add(f2);
+    string f3("Отчество"); fld.add(f3);
+    string f4("Год рождения"); fld.add(f4);
+    string f5("Курс"); fld.add(f5);
+    string f6("Оценки"); fld.add(f6);
     
     list< Type::Type > typ;
-    typ.add( Type::INT );
     typ.add( Type::STRING );
+    typ.add( Type::STRING );
+    typ.add( Type::STRING );
+    typ.add( Type::INT );
+    typ.add( Type::INT );
     typ.add( Type::ARRAY );
 
     table t;
@@ -49,28 +57,65 @@ int main(){
     t.set_fields( fld );
     t.set_types( typ );
 
-    int64_t v_1 = 123; value v1( v_1 );
-    string *v_2 = new string("SOME"); value v2( *v_2 );
-    list< int > v_3;
-    v_3.add( 1 ); v_3.add( 2 ); v_3.add( 3 ); v_3.add( 4 );
-    value v3( v_3 );
-    list< value > o1;
-    o1.add( v1 );
-    o1.add( v2 );
-    o1.add( v3 );
+    {
+      string *o1 = new string("Чузов");
+      string *o2 = new string("Михаил");
+      string *o3 = new string("Юрьевич");
+      int64_t o4 = 2003;
+      int64_t o5 = 1;
+      list< int > o6; o6.add(4); o6.add(4); o6.add(5);
+      value *v1 = new value( *o1 );
+      value *v2 = new value( *o2 );
+      value *v3 = new value( *o3 );
+      value *v4 = new value( o4 );
+      value *v5 = new value( o5 );
+      value *v6 = new value( o6 );
+      list< value > obj;
+      obj.add( *v1 ); obj.add( *v2 );
+      obj.add( *v3 ); obj.add( *v4 );
+      obj.add( *v5 ); obj.add( *v6 );
+      t.add( obj ); 
+    }
 
-    int64_t v_4 = -9876543210; value v4( v_4 );
-    string *v_5 = new string("qwerty-12345"); value v5( *v_5 );
-    list< int > v_6;
-    v_6.add( -1 ); v_6.add( -2 ); v_6.add( -3 ); v_6.add( 400 );
-    value v6 ( v_6 );
-    list < value > o2;
-    o2.add( v4 );
-    o2.add( v5 );
-    o2.add( v6 );
+    {
+      string *o1 = new string("Моисеев");
+      string *o2 = new string("Сергей");
+      string *o3 = new string("Дмитриевич");
+      int64_t o4 = 2003;
+      int64_t o5 = 1;
+      list< int > o6; o6.add(3); o6.add(5); o6.add(5);
+      value *v1 = new value( *o1 );
+      value *v2 = new value( *o2 );
+      value *v3 = new value( *o3 );
+      value *v4 = new value( o4 );
+      value *v5 = new value( o5 );
+      value *v6 = new value( o6 );
+      list< value > obj;
+      obj.add( *v1 ); obj.add( *v2 );
+      obj.add( *v3 ); obj.add( *v4 );
+      obj.add( *v5 ); obj.add( *v6 );
+      t.add( obj ); 
+    }
 
-    t.add( o1 );
-    t.add( o2 );
+    {
+      string *o1 = new string("Ёлгин");
+      string *o2 = new string("Михаил");
+      string *o3 = new string("");
+      int64_t o4 = 2003;
+      int64_t o5 = 1;
+      list< int > o6; o6.add(5); o6.add(3); o6.add(5);
+      value *v1 = new value( *o1 );
+      value *v2 = new value( *o2 );
+      value *v3 = new value( *o3 );
+      value *v4 = new value( o4 );
+      value *v5 = new value( o5 );
+      value *v6 = new value( o6 );
+      list< value > obj;
+      obj.add( *v1 ); obj.add( *v2 );
+      obj.add( *v3 ); obj.add( *v4 );
+      obj.add( *v5 ); obj.add( *v6 );
+      t.add( obj ); 
+    }
 
     db.add( t );
     selected = 1;
@@ -402,6 +447,7 @@ int main(){
                 case 1:{
                         string rq; rq = "SELECT * FROM ";
                         rq += db[selected].name;
+                        rq += " ORDER BY Год рождения";
                         std::cout << "     Запрос по умолчанию: " << rq;
                         std::cout << std::endl;
                         std::cout << "     Результат" << std::endl;
